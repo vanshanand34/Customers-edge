@@ -1,0 +1,121 @@
+body {
+    margin: 0;
+    padding: 0;
+}
+
+.main-container {
+    /* outline:1px solid blueviolet; */
+    padding: 3em;
+    font-family: 'Winky Sans', 'Consolas', sans-serif;
+    width: 75vw;
+    margin: 0 auto;
+}
+
+.heading {
+    padding: 1em 0;
+    text-align: center;
+    font-weight: 400;
+    font-size: 3em;
+    color: blueviolet;
+}
+
+
+.search-bar {
+    /* padding: 0.5em 1em; */
+    /* text-align: center; */
+    height: 2.5em;
+    color: blueviolet;
+    outline: 0.05em solid;
+    /* width: fit-content; */
+    display: flex;
+    align-items: center;
+    border-radius: 1em;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.search-bar:hover {
+    box-shadow: 1px 1px 10px gray;
+}
+
+.search-container {
+    display: flex;
+    justify-content: center;
+    gap: 0 1em;
+    align-items: center;
+    margin: 0 auto;
+}
+
+.btn-submit {
+    font-family: 'Winky Sans', sans-serif;
+    padding: 0.6em 0.8em;
+    border-radius: 0.8em;
+    background-color: blueviolet;
+    color: white;
+    outline: none;
+    border: none;
+    font-size: medium;
+    cursor: pointer;
+}
+
+.btn-submit:hover {
+    color: blueviolet;
+    background-color: white;
+    box-shadow: 1px 1px 8px gray;
+}
+
+#search_text {
+    padding: 0.5em 1em;
+    padding-right: 10em;
+    font-size: large;
+    border: none;
+    outline: none;
+    color: blueviolet;
+    font-family: 'Winky Sans', 'Consolas';
+}
+
+.search-icon {
+    display: flex;
+    align-items: center;
+    background-color: blueviolet;
+    fill: white;
+    padding: 0.8em;
+    overflow: hidden;
+    cursor: pointer;
+    font-weight: bolder;
+    border: none;
+    outline: none;
+}
+
+.search-icon:hover {
+    fill: blueviolet;
+    border-left: 0.05em solid blueviolet;
+    background: #fff;
+}
+
+.trending-head {
+    color: blueviolet;
+    padding: 4em 0;
+    font-size: larger;
+}
+
+.navbar-container {
+    font-family: 'Winky Sans', 'Consolas', sans-serif;
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: blueviolet;
+    color: white;
+    padding: 0.5em 3em;
+}
+
+.nav-title {
+    font-size: 2em;
+}
+
+.nav-about {
+    font-size: 1.5em;
+}

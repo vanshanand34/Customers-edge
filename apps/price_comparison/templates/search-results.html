@@ -1,3 +1,5 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -5,88 +7,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Search Results</title>
-    <style>
-        .main-container {
-            width: 65vw;
-            margin: 0 auto;
-            padding: 1em;
-            font-family: 'Winky Sans', 'Consolas', sans-serif;
-        }
-
-        .heading-container {
-            padding-top: 2em;
-            padding-bottom: 4em;
-        }
-
-        .heading {
-            margin: 0 auto;
-            font-size: 2em;
-            padding: 0.5em 1em;
-            background-color: blueviolet;
-            color: white;
-            text-align: center;
-            text-transform: uppercase;
-            border-radius: 0.5em;
-            width: fit-content;
-            outline: 1px solid gray;
-
-        }
-
-        .search-text-container {
-            padding-top: 2em;
-        }
-
-        .search-text {
-            margin: 0 auto;
-            font-size: 1.5em;
-            padding: 0.2em 1em;
-            outline: 1px solid blueviolet;
-            color: blueviolet;
-            text-align: center;
-            border-radius: 0.5em;
-            width: fit-content;
-        }
-
-        td {
-            border: 0.5px solid blueviolet;
-            border-collapse: collapse;
-            font-family: 'Winky Sans', 'Consolas', sans-serif;
-            word-wrap: break-word;
-        }
-
-        table {
-            border-collapse: collapse;
-            table-layout: fixed;
-            width: 100%;
-        }
-
-        .left-top {
-            border-top-left-radius: 1em;
-        }
-
-        .right-top {
-            border-top-right-radius: 1em;
-        }
-
-        th {
-            background-color: blueviolet;
-            color: white;
-            padding: 1em;
-        }
-
-        td {
-            padding: 0.8em;
-            text-align: center;
-        }
-
-        .table-container {
-            padding-top: 4em;
-        }
-
-        .price-col, .rating-col, .platform-col{
-            width:10%;
-        }
-    </style>
+    <link rel="stylesheet" href="{% static "search.css" %}" />
 </head>
 
 <body>
