@@ -50,6 +50,7 @@ def flipkart(search_text: str):
                     else None
                 ),
                 "image_src": image[0].get("src") if image else None,
+                "platform": "flipkart"
             }
         )
 

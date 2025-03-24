@@ -67,6 +67,7 @@ def amazon(search_text: str):
                     "rating": clean_rating(rating) if rating else None,
                     "product_url": website_link if website_link else None,
                     "image_src": image if image else None,
+                    "platform": "amazon"
                 }
             )
         except Exception as err:

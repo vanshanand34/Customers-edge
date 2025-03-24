@@ -23,7 +23,7 @@ body {
 .search-bar {
     /* padding: 0.5em 1em; */
     /* text-align: center; */
-    height: 2.5em;
+    height: 3em;
     color: blueviolet;
     outline: 0.05em solid;
     /* width: fit-content; */
@@ -79,7 +79,7 @@ body {
     align-items: center;
     background-color: blueviolet;
     fill: white;
-    padding: 0.8em;
+    padding: 2em 1em;
     overflow: hidden;
     cursor: pointer;
     font-weight: bolder;
