@@ -18,8 +18,12 @@
                 <div class="search-text">{{search_text}}</div>
             </div>
         </div>
+        <div class="btns">
+            <button class="sort-btn" id="sort-price">Sort By Price</button>
+            <button class="sort-btn" id="sort-rating">Sort By Rating</button>
+        </div>
         <div class="table-container">
-            <table>
+            <table id="sortable-table">
                 <tr>
                     <th class="left-top">Name</th>
                     <th class="price-col">Price</th>
@@ -43,6 +47,10 @@
             </table>
         </div>
     </div>
+    <script>
+        let data = {{ data|safe }};
+    </script>
+    <script src="{% static "script.js" %}" ></script>
 </body>
 
 </html>

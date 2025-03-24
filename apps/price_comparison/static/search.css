@@ -80,3 +80,28 @@ td {
 .platform-col {
     width: 10%;
 }
+
+.btns{
+    padding:1em;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.sort-btn{
+    padding:0.5em 1em;
+    background-color: blueviolet;
+    border:none;
+    outline:none;
+    color:white;
+    border-radius: 0.6em;
+    cursor: pointer;
+    font-size: large;
+}
+
+.sort-btn:hover{
+    outline:0.05em solid blueviolet;
+    color:blueviolet;
+    background: white;
+
+}
