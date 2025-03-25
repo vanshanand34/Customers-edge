@@ -18,9 +18,9 @@
     color: white;
     text-align: center;
     text-transform: uppercase;
-    border-radius: 0.5em;
+    border-radius: 0.7em;
     width: fit-content;
-    outline: 1px solid gray;
+    box-shadow: 1px 1px 8px gray;
 
 }
 
@@ -31,7 +31,7 @@
 .search-text {
     margin: 0 auto;
     font-size: 1.5em;
-    padding: 0.2em 1em;
+    padding: 0.2em 1.5em;
     outline: 1px solid blueviolet;
     color: blueviolet;
     text-align: center;
@@ -64,6 +64,7 @@ th {
     background-color: blueviolet;
     color: white;
     padding: 1em;
+    text-align: center;
 }
 
 td {
@@ -77,31 +78,63 @@ td {
 
 .price-col,
 .rating-col,
-.platform-col {
-    width: 10%;
+.link-col {
+    width: 8%;
 }
 
-.btns{
-    padding:1em;
+.btns {
+    padding: 1em;
     display: flex;
     justify-content: space-around;
     align-items: center;
 }
 
-.sort-btn{
-    padding:0.5em 1em;
+.sort-btn {
+    padding: 0.5em 1em;
     background-color: blueviolet;
-    border:none;
-    outline:none;
-    color:white;
+    border: none;
+    outline: none;
+    color: white;
     border-radius: 0.6em;
     cursor: pointer;
     font-size: large;
 }
 
-.sort-btn:hover{
-    outline:0.05em solid blueviolet;
-    color:blueviolet;
+.sort-btn:hover {
+    outline: 0.05em solid blueviolet;
+    color: blueviolet;
     background: white;
+}
 
+th {
+    font-size: large;
+}
+
+
+@media screen and (max-width: 760px) {
+    .main-container {
+        width: 80vw;
+        margin: 0 auto;
+        padding: 1em;
+    }
+
+    .heading {
+        font-size: 1em;
+        padding: 0.5em 0.6em;
+    }
+
+    td {
+        font-size: small;
+        font-weight: 500;
+        font-family: 'Winky Sans';
+    }
+
+    th {
+        font-size: small
+    }
+
+    .sort-btn {
+        padding: 0.4em 0.6em;
+        font-size: medium;
+    }
 }

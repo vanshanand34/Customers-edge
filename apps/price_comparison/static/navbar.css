@@ -1,0 +1,41 @@
+.navbar-container {
+    font-family: 'Winky Sans', 'Consolas', sans-serif;
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: blueviolet;
+    color: white;
+    padding: 0.5em 3em;
+}
+
+.nav-title {
+    font-size: 2em;
+    color: white;
+    text-decoration: none;
+}
+
+.nav-title:hover{
+    color:rgb(231, 211, 251);
+}
+
+.nav-about {
+    font-size: max(1em, 2vw);
+}
+
+body{
+    padding: 0;
+    margin: 0;
+}
+
+@media screen and (max-width: 750px) {
+    .nav-title{
+        font-size: 1em;
+    }
+
+    .navbar{
+        padding:0.5em 1em;
+    }
+}
