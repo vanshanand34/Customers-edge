@@ -2,17 +2,25 @@ import requests
 from bs4 import BeautifulSoup
 from pprint import pprint
 
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+
+
 
 def run():
-    search_text = "samsung galaxybook 4"
+    search_text = "samsung galaxy book 4"
+
     search_results = flipkart(search_text)
-    # search_results = amazon(search_text)
     for prod in search_results:
         pprint(prod)
 
 
+def convert_str_to_url(text: str):
+    text = "+".join(text.split(" "))
+    return text.replace(" ", "%20")
+
+
 def flipkart(search_text: str):
-    search_text = convert_str_to_url(search_text)
 
     base_url = "https://www.flipkart.com"
     search_url = (
@@ -22,43 +30,76 @@ def flipkart(search_text: str):
         + "&otracker=search&otracker1=search&marketplace=FLIPKART&as-show=on&as=off"
     )
 
-    r = requests.get(search_url)
 
-    soup = BeautifulSoup(r.content, "html.parser")
+    print(search_url)
 
-    # First find all the product div elements
+    options = webdriver.ChromeOptions()
+    options.add_argument("--headless")
+    options.add_argument("--no-sandbox")
+    options.add_argument("--disable-dev-shm-usage")
+    driver = webdriver.Chrome(options=options)
 
-    product_elements = soup.find_all("div", class_="_75nlfW")
+    driver.get(search_url)
+
+    product_elements = driver.find_elements(
+        By.CLASS_NAME, "_75nlfW"
+    )
 
     search_results = []
 
-    for product in product_elements:
-        price = product.select("div.Nx9bqj._4b5DiR")
-        name = product.select("div.KzDlHZ")
-        rating = product.select("div.XQDdHH")
-        website_link = product.select("a.CGtC98")
-        image = product.select("img.DByuf4")
+    exception_count = 0
+    exceptions_body = ""
 
-        search_results.append(
-            {
-                "name": name[0].text if name else None,
-                "price": price[0].text if price else None,
-                "rating": rating[0].text if rating else None,
-                "product_url": (
-                    base_url + "/" + website_link[0].get("href", "")
-                    if website_link
-                    else None
-                ),
-                "image_src": image[0].get("src") if image else None,
-                "platform": "flipkart"
-            }
-        )
+    for product in product_elements:
+        try:
+
+            product = product.find_element(By.XPATH, ".//div[@data-tkid]")
+
+            try:
+                name = product.find_element(By.XPATH, ".//a[@title]").get_attribute("title")
+            except Exception as e:
+                name = product.find_element(By.CSS_SELECTOR, "img").get_attribute("alt")
+
+            price = product.find_element(By.CSS_SELECTOR, "div.Nx9bqj").text
+
+            # rating = product.find_element(
+            #     By.XPATH, ".//div[@data-cy='reviews-block']//a"
+            # ).get_attribute("aria-label")
+
+            website_link = product.find_element(By.TAG_NAME, "a").get_attribute("href")
+            # done
+
+            image = product.find_element(
+                By.CSS_SELECTOR, "img"
+            ).get_attribute("src")  #done
+
+            search_results.append(
+                {
+                    "name": name if name else None,
+                    "price": price.replace("₹", "") if price else None,
+                    # "rating": clean_rating(rating) if rating else None,
+                    "product_url": website_link if website_link else None,
+                    "image_src": image if image else None,
+                    "platform": "flipkart"
+                }
+            )
+        except Exception as err:
+            exception_count += 1
+            exceptions_body += str(err)
+            exceptions_body += "\n"
+
+    print(exception_count)
+    print(exceptions_body)
+
+    driver.quit()
 
     return search_results
 
 
-def convert_str_to_url(text: str):
-    text = "+".join(text.split(" "))
-    return text.replace(" ", "%20")
+def clean_rating(rating_text: str) -> str:
+    """
+    convert rating text fetched from website in the form 
+    `3.9 out of 5 stars, rating details` into `3.9`
+    """
 
-
+    return rating_text.split(" ")[0]
