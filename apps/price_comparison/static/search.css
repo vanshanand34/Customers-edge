@@ -1,5 +1,5 @@
 .main-container {
-    width: 65vw;
+    width: 75vw;
     margin: 0 auto;
     padding: 1em;
     font-family: 'Winky Sans', 'Consolas', sans-serif;
@@ -95,7 +95,7 @@ td {
     border: none;
     outline: none;
     color: white;
-    border-radius: 0.6em;
+    border-radius: 0.8em;
     cursor: pointer;
     font-size: large;
 }
@@ -123,9 +123,13 @@ th {
         padding: 0.5em 0.6em;
     }
 
+    .search-text{
+        font-size: 1em;
+    }
+
     td {
-        font-size: small;
-        font-weight: 500;
+        font-size: x-small;
+        font-weight: 400;
         font-family: 'Winky Sans';
     }
 
@@ -134,7 +138,12 @@ th {
     }
 
     .sort-btn {
-        padding: 0.4em 0.6em;
-        font-size: medium;
+        padding: 0.4em 0.8em;
+        font-size:small;
+    }
+
+    .heading-container {
+        padding-top: 2em;
+        padding-bottom: 1em;
     }
 }
