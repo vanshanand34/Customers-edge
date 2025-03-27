@@ -44,9 +44,9 @@ def amazon(search_text: str):
 
             price = product.find_element(By.CSS_SELECTOR, "span.a-price-whole").text
 
-            name = product.find_element(
+            name = product.find_elements(
                 By.XPATH, ".//div[@data-cy='title-recipe']//h2//span"
-            ).text
+            )[-1].text
 
             rating = product.find_element(
                 By.XPATH, ".//div[@data-cy='reviews-block']//a"
@@ -77,6 +77,8 @@ def amazon(search_text: str):
 
     print(exception_count)
     print(exceptions_body)
+
+    driver.quit()
 
     return search_results
 
