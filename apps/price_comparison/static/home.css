@@ -1,10 +1,15 @@
 body {
     margin: 0;
     padding: 0;
+    background: url("assets/shopping-image-9.png");
+    background-repeat: no-repeat;
+    background-position-y: 20%;
+    background-position-x: 50%;
+    background-size: cover;
+    min-height: 100dvh;
 }
 
 .main-container {
-    /* outline:1px solid blueviolet; */
     padding: 3em;
     padding-top: 7em;
     font-family: 'Geist', 'system-ui', 'Winky Sans', 'Consolas', sans-serif;
@@ -15,15 +20,14 @@ body {
 .heading {
     padding: 1em 0;
     text-align: center;
-    font-weight: 400;
+    font-weight: 600;
     font-size: 3em;
     color: blueviolet;
+    text-shadow: 1px 1px 10px white;
 }
 
 
 .search-bar {
-    /* padding: 0.5em 1em; */
-    /* text-align: center; */
     height: 2.5em;
     color: blueviolet;
     border: 0.05em solid;
@@ -50,7 +54,6 @@ body {
     justify-content: center;
     gap: 0 min(1em, 1vw);
     align-items: center;
-    /* margin: 0 auto; */
     width: fit-content;
 }
 
@@ -86,6 +89,12 @@ body {
     #search_text {
         padding: 0.5em 0.8em;
         width: 8em;
+    }
+
+
+    .heading {
+        padding: 0.6em 0;
+        font-size: 2em;
     }
 }
 

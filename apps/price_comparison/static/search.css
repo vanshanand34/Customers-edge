@@ -1,9 +1,17 @@
+body {
+    margin: 0;
+    padding: 0;
+    background: url("assets/shopping-image-10.png");
+    background-attachment: fixed;
+    background-size: cover;
+}
+
 .main-container {
     width: 75vw;
     margin: 0 auto;
     padding: 1em;
     padding-top: 8em;
-    font-family:  'Geist', 'system-ui', 'Winky Sans', 'Consolas', sans-serif;
+    font-family: 'Geist', 'system-ui', 'Winky Sans', 'Consolas', sans-serif;
 }
 
 .heading-container {
@@ -35,6 +43,7 @@
     padding: 0.2em 1.5em;
     outline: 1px solid blueviolet;
     color: blueviolet;
+    background: #fff;
     text-align: center;
     border-radius: 0.5em;
     width: fit-content;
@@ -75,6 +84,11 @@ td {
 
 .table-container {
     padding-top: 4em;
+    padding-bottom: 5em;
+}
+
+#sortable-table {
+    background-color: #eef8fa;
 }
 
 .price-col,
@@ -156,7 +170,7 @@ th {
         width: 16%;
     }
 
-    .platform-col{
+    .platform-col {
         width: 20%;
     }
 }
