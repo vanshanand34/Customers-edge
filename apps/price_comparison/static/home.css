@@ -6,7 +6,8 @@ body {
 .main-container {
     /* outline:1px solid blueviolet; */
     padding: 3em;
-    font-family: 'Winky Sans', 'Consolas', sans-serif;
+    padding-top: 7em;
+    font-family: 'Geist', 'system-ui', 'Winky Sans', 'Consolas', sans-serif;
     width: 75vw;
     margin: 0 auto;
 }
@@ -38,11 +39,12 @@ body {
     box-shadow: 1px 1px 10px gray;
 }
 
-.search-main{
+.search-main {
     display: flex;
     justify-content: center;
     align-items: center;
 }
+
 .search-container {
     display: flex;
     justify-content: center;
@@ -53,7 +55,7 @@ body {
 }
 
 .btn-submit {
-    font-family: 'Winky Sans', sans-serif;
+    font-family: 'Geist', 'system-ui', 'Winky Sans', sans-serif;
     padding: 0.6em 0.8em;
     border-radius: 0.8em;
     background-color: blueviolet;
@@ -77,11 +79,11 @@ body {
     border: none;
     outline: none;
     color: blueviolet;
-    font-family: 'Winky Sans', 'Consolas';
+    font-family: 'Geist', 'system-ui', 'Winky Sans', 'Consolas';
 }
 
 @media screen and (max-width: 760px) {
-    #search_text{
+    #search_text {
         padding: 0.5em 0.8em;
         width: 8em;
     }
@@ -111,4 +113,3 @@ body {
     padding: 4em 0;
     font-size: larger;
 }
-

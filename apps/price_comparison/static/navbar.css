@@ -1,14 +1,19 @@
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=Winky+Sans:ital,wght@0,300..900;1,300..900&display=swap');
+
 .navbar-container {
-    font-family: 'Winky Sans', 'Consolas', sans-serif;
+    font-family: 'Geist', 'Winky Sans', 'Consolas', sans-serif;
 }
 
 .navbar {
+    position: fixed;
+    width: -webkit-fill-available;
     display: flex;
     justify-content: space-between;
     align-items: center;
     background-color: blueviolet;
+    box-shadow: 1px 1px 10px gray;
     color: white;
-    padding: 0.5em 3em;
+    padding: 0.8em 3em;
 }
 
 .nav-title {
@@ -17,25 +22,40 @@
     text-decoration: none;
 }
 
-.nav-title:hover{
-    color:rgb(231, 211, 251);
+
+.nav-item {
+    font-size: 1.25em;
+    cursor: pointer;
 }
 
-.nav-about {
-    font-size: max(1em, 2vw);
+.nav-item:hover,
+.nav-title:hover {
+    color: rgb(187, 187, 187);
 }
 
-body{
+.nav-items {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    row-gap: 1em;
+    width: 35%;
+}
+
+body {
     padding: 0;
     margin: 0;
 }
 
 @media screen and (max-width: 750px) {
-    .nav-title{
+    .nav-title {
         font-size: 1.2em;
     }
 
-    .navbar{
-        padding:0.5em 1em;
+    .navbar {
+        padding: 0.5em 1em;
+    }
+
+    .nav-item {
+        font-size: 0.8em;
     }
 }

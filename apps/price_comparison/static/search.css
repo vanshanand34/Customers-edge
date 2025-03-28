@@ -2,7 +2,8 @@
     width: 75vw;
     margin: 0 auto;
     padding: 1em;
-    font-family: 'Winky Sans', 'Consolas', sans-serif;
+    padding-top: 8em;
+    font-family:  'Geist', 'system-ui', 'Winky Sans', 'Consolas', sans-serif;
 }
 
 .heading-container {
@@ -42,7 +43,7 @@
 td {
     border: 0.5px solid blueviolet;
     border-collapse: collapse;
-    font-family: 'Winky Sans', 'Consolas', sans-serif;
+    font-family: 'Geist', 'system-ui', 'Winky Sans', 'Consolas', sans-serif;
     word-wrap: break-word;
 }
 
@@ -63,7 +64,7 @@ table {
 th {
     background-color: blueviolet;
     color: white;
-    padding: 1em;
+    padding: 1em 0;
     text-align: center;
 }
 
@@ -79,7 +80,7 @@ td {
 .price-col,
 .rating-col,
 .link-col {
-    width: 8%;
+    width: 18%;
 }
 
 .btns {
@@ -87,6 +88,7 @@ td {
     display: flex;
     justify-content: space-around;
     align-items: center;
+    font-family: 'Geist', 'system-ui';
 }
 
 .sort-btn {
@@ -98,6 +100,7 @@ td {
     border-radius: 0.8em;
     cursor: pointer;
     font-size: large;
+    font-family: 'Geist', 'system-ui';
 }
 
 .sort-btn:hover {
@@ -113,9 +116,10 @@ th {
 
 @media screen and (max-width: 760px) {
     .main-container {
-        width: 80vw;
+        width: 89vw;
         margin: 0 auto;
         padding: 1em;
+        padding-top: 6em;
     }
 
     .heading {
@@ -123,14 +127,13 @@ th {
         padding: 0.5em 0.6em;
     }
 
-    .search-text{
+    .search-text {
         font-size: 1em;
     }
 
     td {
         font-size: x-small;
         font-weight: 400;
-        font-family: 'Winky Sans';
     }
 
     th {
@@ -139,11 +142,21 @@ th {
 
     .sort-btn {
         padding: 0.4em 0.8em;
-        font-size:small;
+        font-size: small;
     }
 
     .heading-container {
         padding-top: 2em;
         padding-bottom: 1em;
+    }
+
+    .price-col,
+    .rating-col,
+    .link-col {
+        width: 16%;
+    }
+
+    .platform-col{
+        width: 20%;
     }
 }

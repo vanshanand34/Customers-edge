@@ -40,7 +40,6 @@
           </tr>
           {% for product in data %} {% if product and product.name %}
           <tr>
-            {% comment %} <td class="prod-name-truncate"></td> {% endcomment %}
             <td class="prod-name" data-value="{{product.name}}" >{{product.name}}</td>
             <td>{{product.price}}</td>
             <td>{{product.rating}}</td>
