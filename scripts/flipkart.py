@@ -6,7 +6,6 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 
 
-
 def run():
     search_text = "samsung galaxy book 4"
 
@@ -21,7 +20,6 @@ def convert_str_to_url(text: str):
 
 
 def flipkart(search_text: str):
-
     base_url = "https://www.flipkart.com"
     search_url = (
         base_url
@@ -29,7 +27,6 @@ def flipkart(search_text: str):
         + search_text
         + "&otracker=search&otracker1=search&marketplace=FLIPKART&as-show=on&as=off"
     )
-
 
     print(search_url)
 
@@ -41,9 +38,7 @@ def flipkart(search_text: str):
 
     driver.get(search_url)
 
-    product_elements = driver.find_elements(
-        By.CLASS_NAME, "_75nlfW"
-    )
+    product_elements = driver.find_elements(By.CLASS_NAME, "_75nlfW")
 
     search_results = []
 
@@ -52,35 +47,36 @@ def flipkart(search_text: str):
 
     for product in product_elements:
         try:
-
             product = product.find_element(By.XPATH, ".//div[@data-tkid]")
 
             try:
-                name = product.find_element(By.XPATH, ".//a[@title]").get_attribute("title")
+                name = product.find_element(By.XPATH, ".//a[@title]").get_attribute(
+                    "title"
+                )
             except Exception as e:
                 name = product.find_element(By.CSS_SELECTOR, "img").get_attribute("alt")
 
             price = product.find_element(By.CSS_SELECTOR, "div.Nx9bqj").text
 
-            # rating = product.find_element(
-            #     By.XPATH, ".//div[@data-cy='reviews-block']//a"
-            # ).get_attribute("aria-label")
+            try:
+                rating = float(
+                    product.find_element(By.XPATH, ".//div[@class='XQDdHH']").text
+                )
+            except Exception as e:
+                rating = 0.0
 
             website_link = product.find_element(By.TAG_NAME, "a").get_attribute("href")
-            # done
 
-            image = product.find_element(
-                By.CSS_SELECTOR, "img"
-            ).get_attribute("src")  #done
+            image = product.find_element(By.CSS_SELECTOR, "img").get_attribute("src")
 
             search_results.append(
                 {
                     "name": name if name else None,
                     "price": price.replace("₹", "") if price else None,
-                    # "rating": clean_rating(rating) if rating else None,
+                    "rating": rating,
                     "product_url": website_link if website_link else None,
                     "image_src": image if image else None,
-                    "platform": "flipkart"
+                    "platform": "flipkart",
                 }
             )
         except Exception as err:
@@ -94,12 +90,3 @@ def flipkart(search_text: str):
     driver.quit()
 
     return search_results
-
-
-def clean_rating(rating_text: str) -> str:
-    """
-    convert rating text fetched from website in the form 
-    `3.9 out of 5 stars, rating details` into `3.9`
-    """
-
-    return rating_text.split(" ")[0]
