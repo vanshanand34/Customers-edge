@@ -7,23 +7,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
     addWordTruncation();
 
-    function addWordTruncation(){
+    function addWordTruncation() {
         const elements = document.getElementsByClassName("prod-name");
-            for(const element of elements) {
-                const currVal = element.dataset.value;
-                if(window.innerWidth <= 760){
-                    element.innerHTML = truncateWords(currVal, 8);
-                }else{
-                    element.innerHTML = currVal;
-                }
-            };
+        for (const element of elements) {
+            const currVal = element.dataset.value;
+            if (window.innerWidth <= 1000) {
+                element.innerHTML = truncateWords(currVal, 8);
+            } else {
+                element.innerHTML = currVal;
+            }
+        };
     }
 
-    function truncateWords(text, truncateLength){
+    function truncateWords(text, truncateLength) {
         const words = text.split(" ");
         if (words.length <= truncateLength) return text;
         let truncatedStr = "";
-        for(let i = 0; i < truncateLength; i++){
+        for (let i = 0; i < truncateLength; i++) {
             truncatedStr += words[i] + " ";
         }
         return truncatedStr + "..."
