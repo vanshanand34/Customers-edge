@@ -31,11 +31,10 @@ body {
     height: 2.5em;
     color: blueviolet;
     border: 0.05em solid;
-    /* width: fit-content; */
     display: flex;
     align-items: center;
     border-radius: 1em;
-    justify-content: center;
+    justify-content: space-between;
     overflow: hidden;
 }
 
@@ -83,19 +82,7 @@ body {
     outline: none;
     color: blueviolet;
     font-family: 'Geist', 'system-ui', 'Winky Sans', 'Consolas';
-}
-
-@media screen and (max-width: 760px) {
-    #search_text {
-        padding: 0.5em 0.8em;
-        width: 8em;
-    }
-
-
-    .heading {
-        padding: 0.6em 0;
-        font-size: 2em;
-    }
+    flex-grow: 1;
 }
 
 .search-icon {
@@ -121,4 +108,30 @@ body {
     color: blueviolet;
     padding: 4em 0;
     font-size: larger;
+}
+
+@media screen and (max-width: 760px) {
+    #search_text {
+        padding: 0.5em 0.8em;
+        width: 8em;
+        font-size: small;
+    }
+
+    .heading {
+        padding: 0.6em 0;
+        font-size: 2em;
+    }
+
+    .btn-submit{
+        font-size: small;
+    }
+
+    .search-icon{
+        padding: 1em 0.4em;
+    }
+
+    .search-bar{
+        height: 2em;
+        width:65vw;
+    }
 }

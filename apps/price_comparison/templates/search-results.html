@@ -38,15 +38,18 @@
             <th class="platform-col">Platform</th>
             <th class="link-col right-top">Link</th>
           </tr>
-          {% for product in data %} {% if product and product.name %}
-          <tr>
-            <td class="prod-name" data-value="{{product.name}}">{{product.name}}</td>
-            <td>{{product.price}}</td>
-            <td>{{product.rating}}</td>
-            <td>{{product.platform}}</td>
-            <td><a href="{{product.product_url}}">Link</a></td>
-          </tr>
-          {% endif %} {% endfor %}
+          {% for product in data %}
+            {% if product and product.name %}
+              <tr><td class="prod-name" data-value="{{product.name}}">{{product.name}}</td>
+                <td>{{product.price}}</td>
+                <td>{{product.rating}}</td>
+                <td>{{product.platform}}</td>
+                <td>
+                  <a href="{{product.product_url}}">Link</a>
+                </td>
+              </tr>
+            {% endif %}
+          {% endfor %}
         </table>
       </div>
     </div>
