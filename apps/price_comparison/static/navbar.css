@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=Winky+Sans:ital,wght@0,300..900;1,300..900&display=swap');
 
 .navbar-container {
-    font-family: 'Geist', 'Winky Sans', 'Consolas', sans-serif;
+    font-family: 'Geist', 'system-ui', 'Winky Sans', 'Consolas', sans-serif;
 }
 
 .navbar {
@@ -47,13 +47,23 @@ body {
     margin: 0;
 }
 
-@media screen and (max-width: 750px) {
+@media screen and (max-width: 1024px) {
     .nav-title {
-        font-size: 1.2em;
+        font-size: 1.5em;
     }
 
     .navbar {
         padding: 0.5em 1em;
+    }
+
+    .nav-item {
+        font-size: 1em;
+    }
+}
+
+@media screen and (max-width: 750px) {
+    .nav-title {
+        font-size: 1.2em;
     }
 
     .nav-item {
