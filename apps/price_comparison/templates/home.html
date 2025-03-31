@@ -2,54 +2,119 @@
 <!DOCTYPE html>
 <html lang="en">
 
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>HOME</title>
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Winky+Sans:ital,wght@0,300..900;1,300..900&display=swap"
-              rel="stylesheet">
-        <link rel="stylesheet" href='{% static "home.css" %}' />
-        <link rel="stylesheet" href='{% static "navbar.css" %}' />
-    </head>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HOME</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Winky+Sans:ital,wght@0,300..900;1,300..900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href='{% static "home.css" %}' />
+    <link rel="stylesheet" href='{% static "navbar.css" %}' />
+</head>
 
-    <body>
-        {% include 'navbar.html' %}
+<body>
+    {% include 'navbar.html' %}
+    <div id="search-section">
         <div class="main-container">
+            <div class="search-section">
+                <div class="heading">
+                    <img src="{% static 'assets/price-search-icon.webp' %}" alt="Price Search Icon"
+                        class="price-search-icon">
+                    Search & Compare Prices
+                </div>
+                <div class="sub-heading">
+                    Compare Prices & Grab the Best Deals Instantly!
+                </div>
+                <div class="form-container">
+                    <form action="" id="search_form" method="post">
+                        {% csrf_token %}
+                        <div class="search-main">
+                            <div class="search-container">
+                                <div class="search-bar">
+                                    <input type="text" id="search_text" name="search_text" placeholder="Search item..."
+                                        required />
+                                    <button class="search-icon" type="submit">
+                                        <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="18" height="18"
+                                            viewBox="0 0 64 64">
+                                            <path
+                                                d="M 27 9 C 17.075 9 9 17.075 9 27 C 9 36.925 17.075 45 27 45 C 31.129213 45 34.9263 43.587367 37.966797 41.240234 L 51.048828 54.322266 C 51.952828 55.226266 53.418266 55.226266 54.322266 54.322266 C 55.226266 53.418266 55.226266 51.952828 54.322266 51.048828 L 41.240234 37.966797 C 43.587367 34.9263 45 31.129213 45 27 C 45 17.075 36.925 9 27 9 z M 27 13 C 34.719 13 41 19.281 41 27 C 41 34.719 34.719 41 27 41 C 19.281 41 13 34.719 13 27 C 13 19.281 19.281 13 27 13 z">
+                                            </path>
+                                        </svg>
+                                    </button>
 
-            <div class="heading">
-                Search & Compare Prices
-            </div>
-            <div class="form-container">
-                <form action="" id="search_form" method="post">
-                    {% csrf_token %}
-                    <div class="search-main">
-                        <div class="search-container">
-                            <div class="search-bar">
-                                <input type="text" id="search_text" name="search_text" placeholder="Search item..."
-                                       required />
-                                <button class="search-icon" type="submit">
-                                    <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="18" height="18"
-                                         viewBox="0 0 64 64">
-                                        <path
-                                            d="M 27 9 C 17.075 9 9 17.075 9 27 C 9 36.925 17.075 45 27 45 C 31.129213 45 34.9263 43.587367 37.966797 41.240234 L 51.048828 54.322266 C 51.952828 55.226266 53.418266 55.226266 54.322266 54.322266 C 55.226266 53.418266 55.226266 51.952828 54.322266 51.048828 L 41.240234 37.966797 C 43.587367 34.9263 45 31.129213 45 27 C 45 17.075 36.925 9 27 9 z M 27 13 C 34.719 13 41 19.281 41 27 C 41 34.719 34.719 41 27 41 C 19.281 41 13 34.719 13 27 C 13 19.281 19.281 13 27 13 z">
-                                        </path>
-                                    </svg>
-                                </button>
-
+                                </div>
+                                <button type="submit" class="btn-submit">Search</button>
                             </div>
-                            <button type="submit" class="btn-submit">Search</button>
                         </div>
-                    </div>
 
-                </form>
+                    </form>
 
-            <!-- <div class="trending-head" >
-                Trending Searches
-            </div> -->
+                </div>
             </div>
         </div>
-    </body>
+    </div>
+
+
+    <div class="main-container">
+
+        <div class="trending-head">
+            <div class="trending-head-text">
+                Trending Searches
+            </div>
+        </div>
+        <div class="trending-body">
+            <div class="trending-item">
+                <div class="trending-img">
+                    <img src="{% static 'assets/smart-phone.jpg' %}" alt="">
+                </div>
+                <div class="trending-text">
+                    Mobile Phones
+                </div>
+            </div>
+            <div class="trending-item">
+                <div class="trending-img">
+                    <img src="{% static 'assets/electric-scooter.webp' %}" alt="">
+                </div>
+                <div class="trending-text">
+                    Electric scooters
+                </div>
+            </div>
+            <div class="trending-item">
+                <div class="trending-img">
+                    <img src="{% static 'assets/smart-watch.avif' %}" alt="">
+                </div>
+                <div class="trending-text">
+                    smartwatches for fitness tracking
+                </div>
+            </div>
+            <div class="trending-item">
+                <div class="trending-img">
+                    <img src="{% static 'assets/bluetooth-speaker.webp' %}" alt="">
+                </div>
+                <div class="trending-text">
+                    Best Bluetooth Speakers
+                </div>
+            </div>
+            <div class="trending-item">
+                <div class="trending-img">
+                    <img src="{% static 'assets/earbuds.jpg' %}" alt="">
+                </div>
+                <div class="trending-text">
+                    Top wireless earbuds
+                </div>
+            </div>
+            <div class="trending-item">
+                <div class="trending-img">
+                    <img src="{% static 'assets/gaming-laptop.avif' %}" alt="">
+                </div>
+                <div class="trending-text">
+                    Gaming Laptops
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
 
 </html>
