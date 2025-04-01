@@ -1,8 +1,10 @@
 from django.shortcuts import render
 from django.views.generic.base import View
+from django.contrib import messages
 
 from scripts.amazon import amazon
 from scripts.flipkart import flipkart
+
 from scripts.temp import get_temp_data
 
 import logging
@@ -15,6 +17,9 @@ class HomeView(View):
 
     def post(self, request, *args, **kwargs):
         search_text = request.POST.get("search_text")
+        if not search_text:
+            messages.error(request, "Please enter a search text")
+            return render(request, "home.html")
         print(search_text)
 
         # search_results = get_temp_data()

@@ -61,7 +61,10 @@
 
         <div class="trending-head">
             <div class="trending-head-text">
-                Trending Searches
+                <div>
+                    Trending Searches
+                </div>
+                <img src="{% static 'assets/trending-icon.webp' %}" alt="">
             </div>
         </div>
         <div class="trending-body">
@@ -115,6 +118,27 @@
             </div>
         </div>
     </div>
+
+    <form action="" id="search_form_auto" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="search_text" id="search_text_auto">
+    </form>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const trendingCardsContainer = document.getElementsByClassName('trending-body')[0];
+            trendingCardsContainer?.addEventListener('click', (event) => {
+
+                if (!event.target.closest('.trending-item')) {
+                    console.log("No")
+                    return;
+                }
+                document.getElementById('search_text_auto').value = event.target.innerText;
+                document.getElementById('search_form_auto').submit();
+            })
+        });
+    </script>
+
 </body>
 
 </html>
