@@ -92,7 +92,11 @@ td {
 .price-col,
 .rating-col,
 .link-col {
-    width: 18%;
+    width: 12%;
+}
+
+.platform-col{
+    width: 14%;
 }
 
 .btns {
@@ -129,6 +133,11 @@ td {
     outline: 0.05em solid blueviolet;
     color: blueviolet;
     background: white;
+}
+
+a > img{
+    width:2em;
+    height: 2em;
 }
 
 th {

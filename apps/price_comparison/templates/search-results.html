@@ -76,7 +76,7 @@
         <td>${data.rating}</td>
         <td>${data.platform}</td>
         <td>
-        <a href="${data.product_url}">Link</a></td>
+        <a href="${data.product_url}"><img src="{% static 'assets/link.webp' %}" alt="Link image"></a></td>
       `;
 
       searchTable.appendChild(tableRow);
@@ -103,7 +103,7 @@
       if (!num) {
         return 0.0;
       }
-      console.log(num)
+
       if (typeof num === 'string') {
         num = num.replace(',', '');
       }

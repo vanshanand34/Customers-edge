@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (window.innerWidth <= 1000) {
                 element.innerHTML = truncateWords(currVal, 8);
             } else {
-                element.innerHTML = currVal;
+                element.innerHTML = truncateWords(currVal, 10);
             }
         };
     }
