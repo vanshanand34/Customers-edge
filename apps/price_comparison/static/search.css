@@ -1,9 +1,7 @@
 body {
     margin: 0;
     padding: 0;
-    background: url("assets/shopping-image-10.png");
-    background-attachment: fixed;
-    background-size: cover;
+    background-color: #e7f5f9;
 }
 
 .main-container {
@@ -115,6 +113,16 @@ td {
     cursor: pointer;
     font-size: large;
     font-family: 'Geist', 'system-ui';
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap:0.5em;
+}
+
+.sort-btn > img{
+    width:1em;
+    height: 1em;
+    mix-blend-mode: darken;
 }
 
 .sort-btn:hover {
@@ -172,5 +180,25 @@ th {
 
     .platform-col {
         width: 20%;
+    }
+}
+
+tr{
+    opacity: 0;
+}
+
+tr.fade-in {
+    animation: fadeIn 0.5s ease-out forwards;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(50px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
     }
 }

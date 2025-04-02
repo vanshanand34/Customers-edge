@@ -2,61 +2,121 @@
 
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Search Results</title>
-    <link rel="stylesheet" href="{% static 'search.css' %}" />
-    <link rel="stylesheet" href="{% static 'navbar.css' %}" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Winky+Sans:ital,wght@0,300..900;1,300..900&display=swap"
-      rel="stylesheet"
-    />
-  </head>
 
-  <body>
-    {% include 'navbar.html' %}
-    <div class="main-container">
-      <div class="heading-container">
-        <div class="heading">Search Results for</div>
-        <div class="search-text-container">
-          <div class="search-text">{{search_text}}</div>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Search Results</title>
+  <link rel="stylesheet" href="{% static 'search.css' %}" />
+  <link rel="stylesheet" href="{% static 'navbar.css' %}" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Winky+Sans:ital,wght@0,300..900;1,300..900&display=swap"
+    rel="stylesheet" />
+</head>
+
+<body>
+  {% include 'navbar.html' %}
+  <div class="main-container">
+    <div class="heading-container">
+      <div class="heading">Search Results for</div>
+      <div class="search-text-container">
+        <div class="search-text">{{search_text}}</div>
+      </div>
+    </div>
+    <div class="btns">
+      <button class="sort-btn" id="sort-price">
+        <div>
+          Sort By Price
         </div>
-      </div>
-      <div class="btns">
-        <button class="sort-btn" id="sort-price">Sort By Price</button>
-        <button class="sort-btn" id="sort-rating">Sort By Rating</button>
-      </div>
-      <div class="table-container">
-        <table id="sortable-table">
-          <tr>
+        <img src="{% static 'assets/indian-rupee-symbol.png' %}" alt="Rupee symbol">
+      </button>
+      <button class="sort-btn" id="sort-rating">
+        <div>
+          Sort By Rating
+        </div>
+        <img src="{% static 'assets/rating.svg' %}" alt="Rating image">
+      </button>
+    </div>
+    <div class="table-container">
+      <table id="sortable-table">
+        <tbody id="search-table-body">
+          <tr class="fade-in">
             <th class="name-col left-top">Name</th>
             <th class="price-col">Price</th>
             <th class="rating-col">Rating</th>
             <th class="platform-col">Platform</th>
             <th class="link-col right-top">Link</th>
           </tr>
-          {% for product in data %}
-            {% if product and product.name %}
-              <tr>
-                <td class="prod-name" data-value="{{product.name}}">{{product.name}}</td>
-                <td>{{product.price}}</td>
-                <td>{{product.rating}}</td>
-                <td>{{product.platform}}</td>
-                <td>
-                  <a href="{{product.product_url}}">Link</a>
-                </td>
-              </tr>
-            {% endif %}
-          {% endfor %}
-        </table>
-      </div>
+        </tbody>
+      </table>
     </div>
-    <script>
-      let data = {{ data|safe }};
-    </script>
-    <script src="{% static 'script.js' %}"></script>
-  </body>
+  </div>
+  <script>
+    let searchResultsCollections = [];
+    const search_text = `{{ search_text }}`;
+    const searchTable = document.getElementById("search-table-body");
+    const websocketUrl = "ws://" + window.location.host + "/ws/search-results/";
+    const searchResultSocket = new WebSocket(websocketUrl);
+
+
+    searchResultSocket.onmessage = function (event) {
+      const data = JSON.parse(event.data);
+      console.log(data);
+      data.price = parseFloatCustom(data.price);
+      data.rating = parseFloatCustom(data.rating);
+      searchResultsCollections.push(data);
+      const tableRow = document.createElement('tr');
+
+      tableRow.innerHTML = `
+        <td class="prod-name" data-value="${data.name}">
+          ${data.name}
+        </td>
+        <td>${data.price}</td>
+        <td>${data.rating}</td>
+        <td>${data.platform}</td>
+        <td>
+        <a href="${data.product_url}">Link</a></td>
+      `;
+
+      searchTable.appendChild(tableRow);
+      const rowIndex = searchTable.children.length - 1;
+      const delay = rowIndex * 50;
+      addAnimationClass(tableRow, delay);
+    }
+
+    function addAnimationClass(tableRow, delay) {
+      setTimeout(() => {
+        tableRow.classList.add('fade-in');
+      }, delay);
+    }
+
+    searchResultSocket.onopen = function () {
+      searchResultSocket.send(
+        JSON.stringify({
+          "search_text": search_text
+        })
+      );
+    }
+
+    function parseFloatCustom(num) {
+      if (!num) {
+        return 0.0;
+      }
+      console.log(num)
+      if (typeof num === 'string') {
+        num = num.replace(',', '');
+      }
+      return (
+        typeof num === 'float' ?
+          num :
+          parseFloat(num)
+      );
+    }
+
+
+  </script>
+  <script src="{% static 'script.js' %}"></script>
+</body>
+
 </html>

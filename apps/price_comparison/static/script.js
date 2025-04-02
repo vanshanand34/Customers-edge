@@ -7,6 +7,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     addWordTruncation();
 
+    console.log(searchResultsCollections)
+
     function addWordTruncation() {
         const elements = document.getElementsByClassName("prod-name");
         for (const element of elements) {
@@ -38,22 +40,24 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function sortByPrice() {
-        return data.sort(compareByPrice)
+        return searchResultsCollections.sort(compareByPrice)
     }
 
     function sortByRating() {
-        return data.sort(compareByRating)
+        return searchResultsCollections.sort(compareByRating)
     }
 
-    function updateTableContent(data) {
-        const t = document.getElementById("sortable-table");
+    function updateTableContent(searchResultsCollections) {
+        const t = document.getElementById("search-table-body");
+        const rows = t.rows;
 
-        for (let i = 1; i < t.rows.length; i++) {
-            t.rows[i].children[0].innerHTML = data[i - 1].name;
-            t.rows[i].children[1].innerHTML = data[i - 1].price;
-            t.rows[i].children[2].innerHTML = data[i - 1].rating;
-            t.rows[i].children[3].innerHTML = data[i - 1].platform;
-            t.rows[i].children[4].children[0].href = data[i - 1].product_url;
+        for (let i = 1; i < rows.length; i++) {
+            const product = searchResultsCollections[i - 1];
+            rows[i].children[0].textContent = product.name;
+            rows[i].children[1].textContent = parseFloatCustom(product.price);
+            rows[i].children[2].textContent = parseFloatCustom(product.rating);
+            rows[i].children[3].textContent = product.platform;
+            rows[i].children[4].children[0].href = product.product_url;
         }
     }
 
@@ -75,23 +79,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.getElementById("sort-price").addEventListener('click', () => {
 
-        if (isPriceSorted(data)) {
-            updateTableContent(data.reverse());
+        if (isPriceSorted(searchResultsCollections)) {
+            updateTableContent(searchResultsCollections.reverse());
         } else {
-            data = sortByPrice();
-            updateTableContent(data);
+            searchResultsCollections = sortByPrice();
+            updateTableContent(searchResultsCollections);
         }
 
     });
 
     document.getElementById("sort-rating").addEventListener('click', () => {
 
-        if (isRatingSorted(data)) {
-            updateTableContent(data.reverse());
+        if (isRatingSorted(searchResultsCollections)) {
+            updateTableContent(searchResultsCollections.reverse());
         } else {
-            data = sortByRating();
-            console.log(data);
-            updateTableContent(data);
+            searchResultsCollections = sortByRating();
+            console.log(searchResultsCollections);
+            updateTableContent(searchResultsCollections);
         }
 
     });
