@@ -31,43 +31,29 @@
     <div class="table-container">
       <table id="sortable-table">
         <tbody id="search-table-body">
-          <tr>
+          <tr class="fade-in">
             <th class="name-col left-top">Name</th>
             <th class="price-col">Price</th>
             <th class="rating-col">Rating</th>
             <th class="platform-col">Platform</th>
             <th class="link-col right-top">Link</th>
           </tr>
-          <!-- {% for product in data %}
-        {% if product and product.name %}
-        <tr>
-          <td class="prod-name" data-value="{{product.name}}">{{product.name}}</td>
-          <td>{{product.price}}</td>
-          <td>{{product.rating}}</td>
-          <td>{{product.platform}}</td>
-          <td>
-            <a href="{{product.product_url}}">Link</a>
-          </td>
-        </tr>
-        {% endif %}
-        {% endfor %} -->
         </tbody>
       </table>
     </div>
   </div>
   <script>
-    let data = {{ data| safe }};
     const search_text = `{{ search_text }}`;
     const searchTable = document.getElementById("search-table-body");
     const websocketUrl = "ws://" + window.location.host + "/ws/search-results/";
     const searchResultSocket = new WebSocket(websocketUrl);
-    console.log("yes")
+
 
     searchResultSocket.onmessage = function (event) {
       const data = JSON.parse(event.data);
       console.log(data);
-      const prodData = `<tr>
-                <td class="prod-name" data-value="${data.name}">
+      const tableRow = document.createElement('tr');
+      tableRow.innerHTML = `<td class="prod-name" data-value="${data.name}">
                   ${data.name}
                 </td>
                 <td>${data.price}</td>
@@ -75,10 +61,17 @@
                 <td>${data.platform}</td>
                 <td>
                   <a href="${data.product_url}">Link</a>
-                </td>
-              </tr>`;
-      searchTable.innerHTML += prodData
+                </td>`
+      searchTable.appendChild(tableRow);
+      const rowIndex = searchTable.children.length - 1;
+      const delay = rowIndex * 50;
+      addAnimationClass(tableRow, delay);
+    }
 
+    function addAnimationClass(tableRow, delay) {
+      setTimeout(() => {
+        tableRow.classList.add('fade-in');
+      }, delay);
     }
 
     searchResultSocket.onopen = function () {
