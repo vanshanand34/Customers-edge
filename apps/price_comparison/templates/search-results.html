@@ -25,8 +25,18 @@
       </div>
     </div>
     <div class="btns">
-      <button class="sort-btn" id="sort-price">Sort By Price</button>
-      <button class="sort-btn" id="sort-rating">Sort By Rating</button>
+      <button class="sort-btn" id="sort-price">
+        <div>
+          Sort By Price
+        </div>
+        <img src="{% static 'assets/indian-rupee-symbol.png' %}" alt="Rupee symbol">
+      </button>
+      <button class="sort-btn" id="sort-rating">
+        <div>
+          Sort By Rating
+        </div>
+        <img src="{% static 'assets/rating.svg' %}" alt="Rating image">
+      </button>
     </div>
     <div class="table-container">
       <table id="sortable-table">
@@ -43,6 +53,7 @@
     </div>
   </div>
   <script>
+    let searchResultsCollections = [];
     const search_text = `{{ search_text }}`;
     const searchTable = document.getElementById("search-table-body");
     const websocketUrl = "ws://" + window.location.host + "/ws/search-results/";
@@ -52,16 +63,22 @@
     searchResultSocket.onmessage = function (event) {
       const data = JSON.parse(event.data);
       console.log(data);
+      data.price = parseFloatCustom(data.price);
+      data.rating = parseFloatCustom(data.rating);
+      searchResultsCollections.push(data);
       const tableRow = document.createElement('tr');
-      tableRow.innerHTML = `<td class="prod-name" data-value="${data.name}">
-                  ${data.name}
-                </td>
-                <td>${data.price}</td>
-                <td>${data.rating}</td>
-                <td>${data.platform}</td>
-                <td>
-                  <a href="${data.product_url}">Link</a>
-                </td>`
+
+      tableRow.innerHTML = `
+        <td class="prod-name" data-value="${data.name}">
+          ${data.name}
+        </td>
+        <td>${data.price}</td>
+        <td>${data.rating}</td>
+        <td>${data.platform}</td>
+        <td>
+        <a href="${data.product_url}">Link</a></td>
+      `;
+
       searchTable.appendChild(tableRow);
       const rowIndex = searchTable.children.length - 1;
       const delay = rowIndex * 50;
@@ -79,6 +96,21 @@
         JSON.stringify({
           "search_text": search_text
         })
+      );
+    }
+
+    function parseFloatCustom(num) {
+      if (!num) {
+        return 0.0;
+      }
+      console.log(num)
+      if (typeof num === 'string') {
+        num = num.replace(',', '');
+      }
+      return (
+        typeof num === 'float' ?
+          num :
+          parseFloat(num)
       );
     }
 

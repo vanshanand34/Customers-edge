@@ -113,6 +113,16 @@ td {
     cursor: pointer;
     font-size: large;
     font-family: 'Geist', 'system-ui';
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap:0.5em;
+}
+
+.sort-btn > img{
+    width:1em;
+    height: 1em;
+    mix-blend-mode: darken;
 }
 
 .sort-btn:hover {
@@ -184,7 +194,7 @@ tr.fade-in {
 @keyframes fadeIn {
     from {
         opacity: 0;
-        transform: translateY(30px);
+        transform: translateY(50px);
     }
 
     to {
