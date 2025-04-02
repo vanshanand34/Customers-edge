@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function updateTableContent(data) {
-        const t = document.getElementById("sortable-table");
+        const t = document.getElementById("search-table-body");
 
         for (let i = 1; i < t.rows.length; i++) {
             t.rows[i].children[0].innerHTML = data[i - 1].name;

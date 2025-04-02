@@ -44,10 +44,14 @@ CREATED_APPS = [
 ]
 
 THIRD_PARTY_APPS = [
+    'daphne',
+    'channels',
     'django_extensions',
 ]
 
-INSTALLED_APPS = DJANGO_APPS + CREATED_APPS + THIRD_PARTY_APPS
+INSTALLED_APPS = THIRD_PARTY_APPS + DJANGO_APPS + CREATED_APPS
+
+ASGI_APPLICATION = 'config.asgi.application'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
