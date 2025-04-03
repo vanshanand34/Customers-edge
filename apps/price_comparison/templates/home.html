@@ -12,6 +12,11 @@
         rel="stylesheet">
     <link rel="stylesheet" href='{% static "home.css" %}' />
     <link rel="stylesheet" href='{% static "navbar.css" %}' />
+    <link href='https://fonts.googleapis.com/css?family=Droid Sans' rel='stylesheet' />
+    <link
+    href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=Inconsolata:wght@200..900&family=Roboto:ital,wght@0,100..900;1,100..900&family=Winky+Sans:ital,wght@0,300..900;1,300..900&display=swap"
+    rel="stylesheet" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=trending_up" />
 </head>
 
 <body>
@@ -20,8 +25,6 @@
         <div class="main-container">
             <div class="search-section">
                 <div class="heading">
-                    <img src="{% static 'assets/price-search-icon.webp' %}" alt="Price Search Icon"
-                        class="price-search-icon">
                     Search & Compare Prices
                 </div>
                 <div class="sub-heading">
@@ -64,58 +67,28 @@
                 <div>
                     Trending Searches
                 </div>
-                <img src="{% static 'assets/trending-icon.webp' %}" alt="">
+                <span class="material-symbols-outlined">
+                    trending_up
+                    </span>
             </div>
         </div>
         <div class="trending-body">
-            <div class="trending-item">
-                <div class="trending-img">
-                    <img src="{% static 'assets/smart-phone.jpg' %}" alt="">
-                </div>
-                <div class="trending-text">
-                    Mobile Phones
-                </div>
-            </div>
-            <div class="trending-item">
-                <div class="trending-img">
-                    <img src="{% static 'assets/electric-scooter.webp' %}" alt="">
-                </div>
-                <div class="trending-text">
-                    Electric scooters
-                </div>
-            </div>
-            <div class="trending-item">
-                <div class="trending-img">
-                    <img src="{% static 'assets/smart-watch.avif' %}" alt="">
-                </div>
-                <div class="trending-text">
-                    smartwatches for fitness tracking
-                </div>
-            </div>
-            <div class="trending-item">
-                <div class="trending-img">
-                    <img src="{% static 'assets/bluetooth-speaker.webp' %}" alt="">
-                </div>
-                <div class="trending-text">
-                    Best Bluetooth Speakers
-                </div>
-            </div>
-            <div class="trending-item">
-                <div class="trending-img">
-                    <img src="{% static 'assets/earbuds.jpg' %}" alt="">
-                </div>
-                <div class="trending-text">
-                    Top wireless earbuds
-                </div>
-            </div>
-            <div class="trending-item">
-                <div class="trending-img">
-                    <img src="{% static 'assets/gaming-laptop.avif' %}" alt="">
-                </div>
-                <div class="trending-text">
-                    Gaming Laptops
-                </div>
-            </div>
+            {% include 'components/trending-card.html' with trending_text="Smart Phones" img_src="assets/smart-phone.jpg" %}
+
+            {% include 'components/trending-card.html' with trending_text="Electric scooters" img_src="assets/electric-scooter.webp" %}
+
+            {% include 'components/trending-card.html' with trending_text="smartwatches for fitness tracking" img_src="assets/smart-watch.avif" %}
+
+            {% include 'components/trending-card.html' with trending_text=" Best Bluetooth Speakers" img_src="assets/bluetooth-speaker.webp" %}
+
+            {% include 'components/trending-card.html' with trending_text="Top wireless earbuds" img_src="assets/earbuds.jpg" %}
+
+            {% include 'components/trending-card.html' with trending_text="Gaming Laptops" img_src="assets/gaming-laptop.avif" %}
+
+            {% include 'components/trending-card.html' with trending_text="Cheap Outdoor furniture" img_src="assets/furniture.jpg" %}
+
+            {% include 'components/trending-card.html' with trending_text="Affordable gardening tools" img_src="assets/gardening.webp" %}
+
         </div>
     </div>
 
@@ -133,7 +106,8 @@
                     console.log("No")
                     return;
                 }
-                document.getElementById('search_text_auto').value = event.target.innerText;
+                const searchText = event.target.closest('.trending-item').querySelector('.trending-text').innerText;
+                document.getElementById('search_text_auto').value = searchText;
                 document.getElementById('search_form_auto').submit();
             })
         });

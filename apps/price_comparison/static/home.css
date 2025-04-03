@@ -1,3 +1,8 @@
+:root{
+    --primary-font: 'Roboto';
+    --secondary-font: 'system-ui';
+}
+
 body {
     margin: 0;
     padding: 0;
@@ -9,9 +14,11 @@ body {
 .main-container {
     padding: 3em;
     padding-top: 7em;
-    font-family: 'Geist', 'system-ui', 'Winky Sans', 'Consolas', sans-serif;
+    padding-bottom: 5em;
+    font-family: var(--primary-font);
     width: 65vw;
     margin: 0 auto;
+    border-bottom: 1px solid gray;
 }
 
 .search-section {
@@ -90,7 +97,7 @@ body {
 }
 
 .btn-submit {
-    font-family: 'Geist', 'system-ui', 'Winky Sans', sans-serif;
+    font-family: var(--primary-font);
     padding: 0.6em 0.8em;
     border-radius: 0.8em;
     outline: none;
@@ -113,7 +120,7 @@ body {
     border: none;
     outline: none;
     color: blueviolet;
-    font-family: 'Geist', 'system-ui', 'Winky Sans', 'Consolas';
+    font-family: var(--primary-font);
     flex-grow: 1;
 }
 
@@ -137,11 +144,12 @@ body {
 
 .trending-head-text {
     padding: 0.5em 1em;
-    border-radius: 1em;
-    font-size: 1.5em;
+    padding-left: 1.5em;
+    border-radius: 0.5em;
+    font-size: 1.2em;
     font-weight: 500;
     width: fit-content;
-    background-color: blueviolet;
+    background-color: rgb(126, 17, 227);
     color: white;
     display: flex;
     justify-content: center;
@@ -149,14 +157,15 @@ body {
     gap: 0.5em;
 }
 
-.trending-head-text > img{
-    width:1.5em;
-    height:1.5em;
-    mix-blend-mode: luminosity;
+.trending-head-text>img {
+    width: 2em;
+    height: 2em;
+    mix-blend-mode: darken;
+    object-fit: scale-down;
 }
 
-.trending-head{
-    padding:0 0 2em 0;
+.trending-head {
+    padding: 0 0 2em 0;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -172,7 +181,6 @@ body {
 }
 
 .trending-item {
-    /* border:1px solid gray; */
     border-radius: 0.5em;
     flex-basis: 0;
     align-self: stretch;
@@ -181,22 +189,31 @@ body {
     box-shadow: 1px 1px 6px gray;
     cursor: pointer;
     background-color: #fff;
+
+}
+
+.trending-subitem{
+    height: 100%;
     display: flex;
+    border-radius: 0.5em;
     flex-direction: column;
     justify-content: space-between;
 }
 
+.trending-item:hover{
+    box-shadow:1px 1px 10px rgb(65, 65, 65);
+}
+
 .trending-img {
     overflow: hidden;
+    border-radius: 0.5em;
 }
 
 .trending-img>img {
     width: 14em;
-    height: 10em;
-    object-fit: contain;
+    height:10em;
+    object-fit: cover;
     background-color: white;
-    border-top-left-radius: 0.5em;
-    border-top-right-radius: 0.5em;
 }
 
 .trending-text {
@@ -204,7 +221,7 @@ body {
     text-align: center;
     font-size: 1em;
     padding: 0.5em 2em;
-    background-color: blueviolet;
+    background-color: rgb(154, 97, 253);
     color: white;
     font-weight: 500;
     flex-grow: 1;
@@ -226,8 +243,8 @@ body {
         font-size: 2.5em;
     }
 
-    .search-main{
-        padding:0 2em;
+    .search-main {
+        padding: 0 2em;
     }
 }
 
@@ -249,9 +266,9 @@ body {
         gap: 0 0.5em;
     }
 
-    .sub-heading{
+    .sub-heading {
         font-size: 0.8em;
-        padding:0.5em 0.8em;
+        padding: 0.5em 0.8em;
     }
 
     .price-search-icon {
@@ -273,8 +290,8 @@ body {
         /* width:60vw; */
     }
 
-    .search-main{
-        padding:0;
+    .search-main {
+        padding: 0;
     }
 
     .form-container {
@@ -291,7 +308,7 @@ body {
         font-size: 1em;
     }
 
-    .trending-body{
+    .trending-body {
         justify-content: center;
     }
 }

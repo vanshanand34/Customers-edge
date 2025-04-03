@@ -13,23 +13,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const elements = document.getElementsByClassName("prod-name");
         for (const element of elements) {
             const currVal = element.dataset.value;
-            if (window.innerWidth <= 1000) {
-                element.innerHTML = truncateWords(currVal, 8);
-            } else {
-                element.innerHTML = currVal;
-            }
+            element.innerHTML = truncateWords(currVal, 8);
         };
     }
 
-    function truncateWords(text, truncateLength) {
-        const words = text.split(" ");
-        if (words.length <= truncateLength) return text;
-        let truncatedStr = "";
-        for (let i = 0; i < truncateLength; i++) {
-            truncatedStr += words[i] + " ";
-        }
-        return truncatedStr + "..."
-    }
 
     function compareByPrice(prod1, prod2) {
         return (parseFloat(prod1.price) < parseFloat(prod2.price) ? -1 : 1);

@@ -10,7 +10,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: blueviolet;
+    background-color: #5606a1;
     box-shadow: 1px 1px 10px gray;
     color: white;
     padding: 0.8em 3em;
@@ -42,7 +42,7 @@
     align-items: center;
     justify-content: space-around;
     row-gap: 1em;
-    width: 35%;
+    width: 45%;
 }
 
 .nav-item a {
