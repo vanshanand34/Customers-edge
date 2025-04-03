@@ -1,3 +1,8 @@
+:root{
+    --primary-font: 'Roboto';
+    --secondary-font: 'system-ui';
+}
+
 body {
     margin: 0;
     padding: 0;
@@ -10,7 +15,7 @@ body {
     padding: 3em;
     padding-top: 7em;
     padding-bottom: 5em;
-    font-family: 'Winky Sans', 'Geist', 'system-ui', 'Consolas', sans-serif;
+    font-family: var(--primary-font);
     width: 65vw;
     margin: 0 auto;
     border-bottom: 1px solid gray;
@@ -92,7 +97,7 @@ body {
 }
 
 .btn-submit {
-    font-family: 'Winky Sans', 'Geist', 'system-ui', sans-serif;
+    font-family: var(--primary-font);
     padding: 0.6em 0.8em;
     border-radius: 0.8em;
     outline: none;
@@ -115,7 +120,7 @@ body {
     border: none;
     outline: none;
     color: blueviolet;
-    font-family: 'Winky Sans', 'Geist', 'system-ui', 'Consolas';
+    font-family: var(--primary-font);
     flex-grow: 1;
 }
 
@@ -149,7 +154,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 0em;
+    gap: 0.5em;
 }
 
 .trending-head-text>img {
@@ -176,7 +181,6 @@ body {
 }
 
 .trending-item {
-    /* border:1px solid gray; */
     border-radius: 0.5em;
     flex-basis: 0;
     align-self: stretch;
@@ -185,7 +189,13 @@ body {
     box-shadow: 1px 1px 6px gray;
     cursor: pointer;
     background-color: #fff;
+
+}
+
+.trending-subitem{
+    height: 100%;
     display: flex;
+    border-radius: 0.5em;
     flex-direction: column;
     justify-content: space-between;
 }
@@ -196,15 +206,14 @@ body {
 
 .trending-img {
     overflow: hidden;
+    border-radius: 0.5em;
 }
 
 .trending-img>img {
-    width: 12em;
-    height:8em;
-    object-fit: contain;
+    width: 14em;
+    height:10em;
+    object-fit: cover;
     background-color: white;
-    border-top-left-radius: 0.5em;
-    border-top-right-radius: 0.5em;
 }
 
 .trending-text {
@@ -212,7 +221,7 @@ body {
     text-align: center;
     font-size: 1em;
     padding: 0.5em 2em;
-    background-color: blueviolet;
+    background-color: rgb(154, 97, 253);
     color: white;
     font-weight: 500;
     flex-grow: 1;
