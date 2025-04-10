@@ -12,6 +12,7 @@ It helps users make informed decisions by comparing product prices across multip
 - **Real-time Scraping** — Uses Selenium to dynamically scrape product details during each search.
 - **Fast Load Time** — Powered by Django Channels to fetch and display search results without reloading the page.
 - **Clean UI** — Built with HTML and CSS for simplicity and responsiveness.
+- **Sort By Price/Rating** - Feature to sort search results by price or by rating
 
 ---
 
