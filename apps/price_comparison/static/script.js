@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         for (let i = 1; i < rows.length; i++) {
             const product = searchResultsCollections[i - 1];
-            rows[i].children[0].textContent = product.name;
+            rows[i].children[0].textContent = truncateWords(product.name, 8);
             rows[i].children[1].textContent = parseFloatCustom(product.price);
             rows[i].children[2].textContent = parseFloatCustom(product.rating);
             rows[i].children[3].textContent = product.platform;

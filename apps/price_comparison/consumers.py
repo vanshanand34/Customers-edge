@@ -14,29 +14,29 @@ class SearchResultsConsumer(WebsocketConsumer):
     def connect(self):
         self.search_text = ""
         self.accept()
-        # await self.send_search_results()
 
     def receive(self, text_data=None, bytes_data=None):
         text_data_json = json.loads(text_data)
         search_text = text_data_json.get("search_text")
-        print("got " ,text_data_json)
+        print(text_data_json)
 
         self.search_text = search_text
+
+        # Uncomment below to send temporary data in case of testing
+        # self.send_temp_search_results()
+
         self.send_search_results()
 
     def send_search_results(self):
-        print("innnn")
         self.send_amazon_data()
         self.send_flipkart_data()
 
-        # search_results = get_temp_data()
-        # for item in search_results:
-        #     print("in")
-        #     await self.send(json.dumps(item))
-        #     time.sleep(1)
+    def send_temp_search_results(self):
+        search_results = get_temp_data()
+        for item in search_results:
+            self.send(json.dumps(item))
 
     def send_amazon_data(self):
-        print("in a")
         if not self.search_text:
             return
         base_url = "https://www.amazon.in"
@@ -85,7 +85,7 @@ class SearchResultsConsumer(WebsocketConsumer):
 
                 curr_prod_data = {
                     "name": name if name else None,
-                    "price": price if price else None,
+                    "price": float(price.replace(",", "")) if price else None,
                     "rating": rating.split(" ")[0] if rating else None,
                     "product_url": website_link if website_link else None,
                     "image_src": image if image else None,
@@ -106,9 +106,9 @@ class SearchResultsConsumer(WebsocketConsumer):
         driver.quit()
 
     def send_flipkart_data(self):
-        print("in f")
         if not self.search_text:
             return
+
         base_url = "https://www.flipkart.com"
         search_url = (
             base_url
@@ -116,8 +116,6 @@ class SearchResultsConsumer(WebsocketConsumer):
             + self.search_text
             + "&otracker=search&otracker1=search&marketplace=FLIPKART&as-show=on&as=off"
         )
-
-        print(search_url)
 
         options = webdriver.ChromeOptions()
         options.add_argument("--headless")
@@ -166,7 +164,9 @@ class SearchResultsConsumer(WebsocketConsumer):
 
                 curr_prod_data = {
                     "name": name if name else None,
-                    "price": price.replace("₹", "") if price else None,
+                    "price": float(price.replace("₹", "").replace(",", ""))
+                    if price
+                    else None,
                     "rating": rating,
                     "product_url": website_link if website_link else None,
                     "image_src": image if image else None,
