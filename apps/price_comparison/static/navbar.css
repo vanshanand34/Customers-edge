@@ -1,80 +1,87 @@
-@import url('https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=Winky+Sans:ital,wght@0,300..900;1,300..900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=Winky+Sans:ital,wght@0,300..900;1,300..900&display=swap");
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #fdfdfd;
+  background-size: cover;
+  min-height: 100dvh;
+}
 
 .navbar-container {
-    font-family: 'system-ui', 'Winky Sans', 'Consolas', sans-serif;
+  font-family: "system-ui", "Winky Sans", "Consolas", sans-serif;
 }
 
 .navbar {
-    position: fixed;
-    width: -webkit-fill-available;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #5606a1;
-    box-shadow: 1px 1px 10px gray;
-    color: white;
-    padding: 0.8em 3em;
-    z-index: 10;
+  position: fixed;
+  width: -webkit-fill-available;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #5606a1;
+  box-shadow: 1px 1px 10px gray;
+  color: white;
+  padding: 0.5em 3em;
+  z-index: 10;
 }
 
 .nav-title {
-    font-size: 2em;
-    color: white;
-    text-decoration: none;
-    font-weight: 500;
+  font-size: 1.5em;
+  color: white;
+  text-decoration: none;
+  font-weight: 400;
 }
 
-
 .nav-item {
-    font-size: 1.25em;
-    cursor: pointer;
-    font-weight: 400;
+  font-size: 1em;
+  cursor: pointer;
+  font-weight: 400;
 }
 
 .nav-item:hover,
 .nav-title:hover,
 .nav-item a:hover {
-    color: rgb(216, 216, 216);
+  color: rgb(216, 216, 216);
 }
 
 .nav-items {
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
-    row-gap: 1em;
-    width: 45%;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  row-gap: 1em;
+  width: 45%;
 }
 
 .nav-item a {
-    text-decoration: none;
-    color: white;
+  text-decoration: none;
+  color: white;
 }
 
 body {
-    padding: 0;
-    margin: 0;
+  padding: 0;
+  margin: 0;
 }
 
 @media screen and (max-width: 1024px) {
-    .nav-title {
-        font-size: 1.5em;
-    }
+  .nav-title {
+    font-size: 1.5em;
+  }
 
-    .navbar {
-        padding: 0.8em 1em;
-    }
+  .navbar {
+    padding: 0.8em 1em;
+  }
 
-    .nav-item {
-        font-size: 1em;
-    }
+  .nav-item {
+    font-size: 1em;
+  }
 }
 
 @media screen and (max-width: 750px) {
-    .nav-title {
-        font-size: 1.2em;
-    }
+  .nav-title {
+    font-size: 1.2em;
+  }
 
-    .nav-item {
-        font-size: 0.8em;
-    }
+  .nav-item {
+    font-size: 0.8em;
+  }
 }

@@ -52,31 +52,46 @@
           </div>
         </form>
       </div>
-      <div class="heading-container"></div>
-      <div class="btns">
-        <button class="sort-btn" id="sort-price">
-          <div>Sort By Price</div>
-        </button>
-        <button class="sort-btn" id="sort-rating">
-          <div>Sort By Rating</div>
-        </button>
+      <!-- <div class="heading-container"></div> -->
+
+      <div class="results-header">
+        <div class="results-title">
+          <span>Search results</span>
+          <h1>Results for "{{ search_text }}"</h1>
+        </div>
+
+        <div class="btns">
+          <button class="sort-btn" id="sort-price">
+            <span>Price</span>
+            <span class="sort-icon">↕</span>
+          </button>
+
+          <button class="sort-btn" id="sort-rating">
+            <span>Rating</span>
+            <span class="sort-icon">↕</span>
+          </button>
+        </div>
       </div>
+
       <div class="table-container">
         <table id="sortable-table">
-          <tbody id="search-table-body">
-            <tr class="table-head fade-in">
-              <th class="name-col left-top">Name</th>
+          <thead>
+            <tr class="table-head">
+              <th class="name-col">Name</th>
               <th class="price-col">Price</th>
               <th class="rating-col">Rating</th>
               <th class="platform-col">Platform</th>
-              <th class="link-col right-top">Link</th>
+              <th class="link-col">Link</th>
             </tr>
-          </tbody>
+          </thead>
+
+          <tbody id="search-table-body"></tbody>
         </table>
       </div>
     </div>
     <script>
       const searchText = `{{search_text}}`;
+      var searchResults = [];
     </script>
     <script src="{% static 'parseSearchResults.js' %}"></script>
     <script src="{% static 'script.js' %}"></script>
