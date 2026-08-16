@@ -1,3 +1,5 @@
 #!/bin/bash
 source ./.venv/scripts/activate
-python manage.py runserver
+
+python manage.py collectstatic
+uvicorn config.asgi:application
