@@ -2,32 +2,178 @@
 {% load static %}
 
 {% block title %}
-<title>About Me</title>
+<title>About Us</title>
 {% endblock %}
 
 
+{% block customcss %}
+<link rel="stylesheet" href="{% static 'about-me.css' %}" />
+<link rel="stylesheet" href="{% static 'navbar.css' %}" />
+{% endblock %} 
+
+
 {% block content %}
-{{block.super}}
-<div>
-    <div>
-        <h2>About Me</h2>
+
+{{ block.super }}
+
+<div class="about-container">
+  <!-- Hero -->
+  <section class="about-hero">
+    <div class="about-badge">About the Project</div>
+
+    <h1>
+      Making price comparison
+      <span>simple.</span>
+    </h1>
+
+    <p>
+      Customer's Edge helps you compare products across online marketplaces so
+      you can make better buying decisions without checking multiple websites
+      yourself.
+    </p>
+  </section>
+
+  <!-- Project -->
+  <section class="about-section">
+    <div class="section-label">
+      <span>01</span>
+      The idea
     </div>
 
-    <!-- About me card -->
-    <div>
-        <div class="about-me-card">
-            <div class="about-me-card-image">
-                <img src="{% static 'assets/developer.png' %}" alt="Developer">
-            </div>
-            <div class="about-me-card-text">
-                <h3>Developer</h3>
-                <p>
-                    I am a developer with a passion for creating innovative and user-friendly web applications. I am
-                    currently working as a freelance web developer and have experience in a wide range of technologies,
-                    including HTML, CSS, JavaScript, Python, and Django.
-                </p>
-            </div>
+    <div class="project-card">
+      <div class="project-icon">$</div>
+
+      <div class="project-content">
+        <h2>Customer's Edge</h2>
+
+        <p>
+          Shopping online often means opening multiple websites just to compare
+          the same product. Customer's Edge brings those results together in one
+          place.
+        </p>
+
+        <p>
+          Search for a product and get relevant listings, prices, ratings and
+          product links from different marketplaces in a single view.
+        </p>
+
+        <div class="tech-list">
+          <span>Django</span>
+          <span>Python</span>
+          <span>Playwright</span>
+          <span>JavaScript</span>
         </div>
+      </div>
     </div>
+  </section>
+
+  <!-- How it works -->
+  <section class="about-section">
+    <div class="section-label">
+      <span>02</span>
+      How it works
+    </div>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-number">1</div>
+
+        <div>
+          <h3>Search</h3>
+          <p>Enter the product you're looking for.</p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-number">2</div>
+
+        <div>
+          <h3>Compare</h3>
+          <p>Product listings are collected from supported marketplaces.</p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-number">3</div>
+
+        <div>
+          <h3>Choose</h3>
+          <p>
+            Compare prices and ratings and visit the marketplace that works best
+            for you.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Developer -->
+  <section class="about-section">
+    <div class="section-label">
+      <span>03</span>
+      Built by
+    </div>
+
+    <div class="developer-card">
+      <div class="developer-avatar">VA</div>
+
+      <div class="developer-content">
+        <h2>Vansh Anand</h2>
+
+        <p class="developer-role">Software Developer</p>
+
+        <p>
+          I'm a software developer focused primarily on backend development with
+          Django, while also working with React and Next.js on the frontend.
+        </p>
+
+        <p>
+          Customer's Edge is one of my projects exploring web scraping,
+          asynchronous processing and building a useful product around
+          real-world data.
+        </p>
+
+        <div class="developer-links">
+          <a
+            href="https://github.com/vanshanand34"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            GitHub
+            <span>↗</span>
+          </a>
+
+          <a
+            href="https://www.linkedin.com/in/anandvansh"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            LinkedIn
+            <span>↗</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="about-cta">
+    <div>
+      <h2>Curious about how it works?</h2>
+
+      <p>Explore the source code and see how Customer's Edge is built.</p>
+    </div>
+
+    <a
+      href="https://github.com/vanshanand34"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="github-button"
+    >
+      View on GitHub
+      <span>↗</span>
+    </a>
+  </section>
 </div>
+
 {% endblock %}
