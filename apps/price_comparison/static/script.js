@@ -35,17 +35,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
     for (let i = 0; i < rows.length; i++) {
       const product = searchResults[i];
-      rows[i].children[0].textContent = truncateWords(product.name, 8);
-      rows[i].children[1].textContent = parseFloatCustom(product.price);
-      rows[i].children[2].innerHTML = `
+      rows[i].children[1].textContent = truncateWords(product.name, 8);
+      rows[i].children[2].textContent = parseFloatCustom(product.price);
+      rows[i].children[3].innerHTML = `
         <span class="rating-star">★</span>
         <span class="rating-value">${parseFloatCustom(product.rating)}</span>
         `;
-      rows[i].children[3].innerHTML = `
+      rows[i].children[4].innerHTML = `
         <span class="platform-badge">
             ${product.platform}
         </span>`;
-      rows[i].children[4].children[0].href = product.product_url;
+      rows[i].children[5].children[0].href = product.product_url;
     }
   }
 

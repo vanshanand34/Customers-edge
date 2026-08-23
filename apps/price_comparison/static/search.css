@@ -609,3 +609,38 @@ tr.fade-in {
   font-size: 0.85em;
   font-weight: 500;
 }
+
+.image-col {
+  width: 100px;
+}
+
+.product-image-cell {
+  width: 100px;
+  height: 100px;
+  padding: 8px;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.product-image {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+  display: block;
+  margin: 0 auto;
+  border-radius: 6px;
+  background-color: #fff;
+}
+
+.product-image-placeholder {
+  width: 80px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  border-radius: 6px;
+  background: #f3f3f3;
+  color: #888;
+  font-size: 12px;
+}

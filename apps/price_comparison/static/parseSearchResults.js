@@ -51,8 +51,32 @@ function parseSearchResults() {
     const productName = escapeHTML(data.name);
     const platform = escapeHTML(data.platform);
     const truncatedName = escapeHTML(truncatedText);
+    const productImageSrc = escapeHTML(data.image_src);
+    const productUrl = escapeHTML(data.product_url);
 
     tableRow.innerHTML = `
+        <td class="product-image-cell">
+            ${
+              productImageSrc
+                ? `
+                <a
+                  href="${productUrl || "#"}"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <img
+                    class="product-image"
+                    src="${productImageSrc}"
+                    alt="${productName}"
+                    loading="lazy"
+                  />
+                </a>`
+                : `<div class="product-image-placeholder">
+                    No image
+                  </div>`
+            }
+        </td>
+
         <td
           class="prod-name"
           data-value="${productName}"
@@ -78,7 +102,7 @@ function parseSearchResults() {
 
         <td class="prod-link">
           <a
-            href="${data.product_url}"
+            href="${productUrl || "#"}"
             target="_blank"
             rel="noopener noreferrer"
             title="View product"
