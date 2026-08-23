@@ -1,7 +1,7 @@
 import json
 from urllib.parse import quote_plus
 
-from playwright.async_api import async_playwright
+from playwright.async_api import Locator, async_playwright
 
 from .utils import (
     check_if_row_is_empty,
@@ -24,7 +24,7 @@ async def scrape_flipkart(search_text: str):
 
     exception_count = 0
     exceptions = []
-    linkToProductDataMap = {}
+    link_to_product_data_map = {}
 
     try:
         async with async_playwright() as p:
@@ -35,15 +35,12 @@ async def scrape_flipkart(search_text: str):
             page = await context.new_page()
 
             try:
+                # Navigation
                 await page.goto(
                     search_url,
                     wait_until="domcontentloaded",
                     timeout=30000,
                 )
-
-                # ----------------------------------------------
-                # CLOSE LOGIN POPUP IF IT APPEARS
-                # ----------------------------------------------
 
                 try:
                     close_button = page.locator("button._2KpZ6l")
@@ -55,22 +52,21 @@ async def scrape_flipkart(search_text: str):
 
                 except Exception:
                     print("Flipkart login popup not found")
-                    pass
 
-                # Give Flipkart time to render products.
+                # Allow products to render.
                 await page.wait_for_timeout(1500)
 
-                # ----------------------------------------------
                 # PRODUCT CARDS
-                # ----------------------------------------------
-
                 products = page.locator("div._75nlfW")
 
                 product_count = await products.count()
 
-                print("Flipkart products found:", product_count)
+                print(
+                    "Flipkart products found:",
+                    product_count,
+                )
 
-                # Fallback if the class has changed.
+                # Fallback
                 if product_count == 0:
                     print(
                         "Flipkart primary selector "
@@ -82,221 +78,62 @@ async def scrape_flipkart(search_text: str):
 
                     product_count = await products.count()
 
-                    print("Flipkart fallback products:", product_count)
+                    print(
+                        "Flipkart fallback products:",
+                        product_count,
+                    )
+
+                # PROCESS PRODUCTS
 
                 for index in range(product_count):
                     try:
                         product = products.nth(index)
 
-                        # --------------------------------------
-                        # FIND ACTUAL PRODUCT CARD
-                        # --------------------------------------
+                        card = await get_product_card(product)
 
-                        card = product
+                        # ----------------------------------------
+                        # EXTRACT DATA
+                        # ----------------------------------------
 
-                        data_tkid = product.locator("[data-tkid]")
-
-                        if await data_tkid.count() > 0:
-                            card = data_tkid.first
-
-                        # --------------------------------------
-                        # NAME
-                        # --------------------------------------
-
-                        name = None
-
-                        # Preferred:
-                        # <a title="Product name">
-                        name_locator = card.locator("a[title]")
-
-                        if await name_locator.count() > 0:
-                            name = await name_locator.first.get_attribute(
-                                "title",
-                                timeout=3000,
-                            )
-
-                        # Fallback: image alt
-                        if not name:
-                            image_alt_locator = card.locator("img[alt]")
-
-                            if await image_alt_locator.count() > 0:
-                                name = await image_alt_locator.first.get_attribute(
-                                    "alt",
-                                    timeout=3000,
-                                )
-                            else:
-                                name_locator = card.locator("._1psv1zeb9 h1")
-                                if await name_locator.count() > 0:
-                                    name = await name.first.text_content(timeout=3000)
-                                else:
-                                    print(
-                                        "Flipkart product name not found, skipping..."
-                                    )
-
-                        # --------------------------------------
-                        # PRICE
-                        # --------------------------------------
-
-                        price = None
-
-                        price_locator = card.locator("div.css-g5y9jx").filter(
-                            has_text="₹"
+                        curr_prod_data = await get_product_data(
+                            card,
+                            base_url,
                         )
 
-                        if await price_locator.count() == 0:
-                            # Fallback
-                            print("Flipkart price fallback\n\n")
-                            price_locator = card.locator("a").locator("div:text('₹')")
+                        print(
+                            "Flipkart product:",
+                            curr_prod_data,
+                        )
 
-                        if await price_locator.count() > 0:
-                            price_text = await price_locator.first.text_content(
-                                timeout=3000
-                            )
+                        # ----------------------------------------
+                        # DEDUPLICATION
+                        # ----------------------------------------
+                        product_url = curr_prod_data.get("product_url")
 
-                            if price_text:
-                                clean_price = (
-                                    price_text.replace("₹", "").replace(",", "").strip()
+                        if product_url:
+                            if product_url in link_to_product_data_map:
+                                print(
+                                    "Duplicate product:",
+                                    curr_prod_data,
                                 )
+                                continue
 
-                                # Keep only numbers and decimal.
-                                price_chars = []
+                            link_to_product_data_map[product_url] = curr_prod_data
 
-                                for char in clean_price:
-                                    if char.isdigit() or char == ".":
-                                        price_chars.append(char)
-
-                                clean_price = "".join(price_chars)
-
-                                if clean_price:
-                                    try:
-                                        print(clean_price + "\n\n")
-                                        price = float(clean_price)
-                                    except ValueError:
-                                        price = None
-
-                        if not price:
-                            print("Flipkart price not found, skipping...")
-                            continue
-
-                        # --------------------------------------
-                        # RATING
-                        # --------------------------------------
-
-                        rating = 0.0
-
-                        rating_locator = card.locator("div.XQDdHH")
-
-                        if await rating_locator.count() == 0:
-                            rating_locator = card.locator("div:has-text('★')")
-
-                        if await rating_locator.count() > 0:
-                            rating_text = await rating_locator.first.text_content(
-                                timeout=3000
-                            )
-
-                            if rating_text:
-                                rating_text = rating_text.replace("★", "").strip()
-
-                                try:
-                                    rating = float(rating_text.split()[0])
-
-                                except (
-                                    ValueError,
-                                    IndexError,
-                                ):
-                                    rating = 0.0
-
-                        # --------------------------------------
-                        # PRODUCT URL
-                        # --------------------------------------
-
-                        product_url = None
-
-                        link_locator = card.locator("a[href*='/p/']")
-
-                        if await link_locator.count() > 0:
-                            product_url = await link_locator.first.get_attribute(
-                                "href",
-                                timeout=3000,
-                            )
-
-                        # Fallback to any link
-                        if not product_url:
-                            link_locator = card.locator("a")
-
-                            if await link_locator.count() > 0:
-                                product_url = await link_locator.first.get_attribute(
-                                    "href",
-                                    timeout=3000,
-                                )
-
-                        if product_url and product_url.startswith("/"):
-                            product_url = base_url + product_url
-
-                        # --------------------------------------
-                        # IMAGE
-                        # --------------------------------------
-
-                        image_src = None
-
-                        image_locator = card.locator("img")
-
-                        if await image_locator.count() > 0:
-                            image_src = await image_locator.first.get_attribute(
-                                "src",
-                                timeout=3000,
-                            )
-
-                            # Lazy-loaded image fallback
-                            if not image_src:
-                                image_src = await image_locator.first.get_attribute(
-                                    "data-src",
-                                    timeout=3000,
-                                )
-
-                            # srcset fallback
-                            if not image_src:
-                                image_src = await image_locator.first.get_attribute(
-                                    "srcset",
-                                    timeout=3000,
-                                )
-
-                        # --------------------------------------
-                        # IGNORE NON-PRODUCT CARDS
-                        # --------------------------------------
-
-                        if not name and not product_url:
-                            continue
-
-                        # --------------------------------------
-                        # PRODUCT DATA
-                        # --------------------------------------
-
-                        curr_prod_data = {
-                            "type": "product",
-                            "name": (name.strip() if name else None),
-                            "price": price,
-                            "rating": rating,
-                            "product_url": product_url,
-                            "image_src": image_src,
-                            "platform": "flipkart",
-                        }
-
-                        print("Flipkart product:", curr_prod_data)
-
-                        if product_url in linkToProductDataMap:
-                            print("Duplicate product:", curr_prod_data)
-                            continue
-
-                        linkToProductDataMap[product_url] = curr_prod_data
-
-                        # --------------------------------------
-                        # SEND DIRECTLY TO FRONTEND
-                        # --------------------------------------
+                        # ----------------------------------------
+                        # VALIDATION
+                        # ----------------------------------------
 
                         if check_if_row_is_empty(curr_prod_data):
-                            print("Flipkart product is empty:", curr_prod_data)
+                            print(
+                                "Flipkart product is empty:",
+                                curr_prod_data,
+                            )
                             continue
+
+                        # ----------------------------------------
+                        # SEND TO FRONTEND
+                        # ----------------------------------------
 
                         yield curr_prod_data
 
@@ -309,7 +146,10 @@ async def scrape_flipkart(search_text: str):
                 await browser.close()
 
     except Exception as error:
-        print("Flipkart scraper error:", error)
+        print(
+            "Flipkart scraper error:",
+            error,
+        )
 
         yield json.dumps(
             {
@@ -319,7 +159,295 @@ async def scrape_flipkart(search_text: str):
             }
         )
 
-    print("Flipkart exception count:", exception_count)
+    print(
+        "Flipkart exception count:",
+        exception_count,
+    )
 
     if exceptions:
         print("\n".join(exceptions))
+
+
+# ============================================================
+# PRODUCT DETAIL HELPERS
+# ============================================================
+
+
+async def get_product_name(card: Locator) -> str | None:
+    """
+    Extract product name from a Flipkart product card.
+    """
+
+    # Preferred: product link with title
+    locator = card.locator("a[title]")
+
+    if await locator.count() > 0:
+        name = await locator.first.get_attribute(
+            "title",
+            timeout=3000,
+        )
+
+        if name:
+            return name.strip()
+
+    # Fallback: image alt
+    locator = card.locator("img[alt]")
+
+    if await locator.count() > 0:
+        name = await locator.first.get_attribute(
+            "alt",
+            timeout=3000,
+        )
+
+        if name:
+            return name.strip()
+
+    # Fallback: known Flipkart product-title structure
+    locator = card.locator("._1psv1zeb9 h1")
+
+    if await locator.count() > 0:
+        name = await locator.first.text_content(
+            timeout=3000,
+        )
+
+        if name:
+            return name.strip()
+
+    return None
+
+
+async def get_product_price(card: Locator) -> float | None:
+    """
+    Extract product price from a Flipkart product card.
+    """
+
+    # Preferred selector
+    locator = card.locator("div.css-g5y9jx").filter(has_text="₹")
+
+    # Fallback
+    if await locator.count() == 0:
+        locator = card.locator("a").locator("div:text('₹')")
+
+    if await locator.count() == 0:
+        return None
+
+    price_text = await locator.first.text_content(timeout=3000)
+
+    if not price_text:
+        return None
+
+    # Remove currency and commas
+    clean_price = price_text.replace("₹", "").replace(",", "").strip()
+
+    # Keep only digits and decimal point
+    clean_price = "".join(char for char in clean_price if char.isdigit() or char == ".")
+
+    if not clean_price:
+        return None
+
+    try:
+        return float(clean_price)
+    except ValueError:
+        return None
+
+
+async def get_product_rating(card: Locator) -> float | None:
+    """
+    Extract product rating from a Flipkart product card.
+
+    Important:
+    The rating lookup is scoped to `card`, so ratings from
+    other products on the search page cannot be accidentally
+    picked up.
+    """
+
+    # --------------------------------------------------------
+    # Preferred Flipkart rating selector
+    # --------------------------------------------------------
+
+    locator = card.locator("div.MKiFS6")
+
+    if await locator.count() == 0:
+        return None
+
+    rating_text = await locator.first.text_content(timeout=3000)
+    rating = parse_rating(rating_text)
+    return rating
+
+
+def parse_rating(text: str | None) -> float | None:
+    """
+    Convert rating text such as:
+        '4.3'
+        '4.3 ★'
+        '4.3 12,345 Ratings'
+
+    into:
+        4.3
+    """
+
+    if not text:
+        return None
+
+    text = text.replace("★", " ").strip()
+
+    # First token should normally be the rating.
+    first_token = text.split()[0] if text.split() else ""
+
+    try:
+        rating = float(first_token)
+    except ValueError:
+        return None
+
+    # Sanity check.
+    if 0 <= rating <= 5:
+        return rating
+
+    return None
+
+
+async def get_product_url(
+    card: Locator,
+    base_url: str,
+) -> str | None:
+    """
+    Extract product URL from a Flipkart product card.
+    """
+
+    # Preferred: actual product link
+    locator = card.locator("a[href*='/p/']")
+
+    if await locator.count() > 0:
+        product_url = await locator.first.get_attribute(
+            "href",
+            timeout=3000,
+        )
+
+        if product_url:
+            return normalize_product_url(
+                product_url,
+                base_url,
+            )
+
+    # Fallback: any anchor
+    locator = card.locator("a")
+
+    if await locator.count() == 0:
+        return None
+
+    product_url = await locator.first.get_attribute(
+        "href",
+        timeout=3000,
+    )
+
+    if product_url:
+        return normalize_product_url(
+            product_url,
+            base_url,
+        )
+
+    return None
+
+
+def normalize_product_url(
+    product_url: str,
+    base_url: str,
+) -> str:
+    """
+    Convert relative Flipkart URLs into absolute URLs.
+    """
+
+    if product_url.startswith("/"):
+        return base_url + product_url
+
+    return product_url
+
+
+async def get_product_image(card: Locator) -> str | None:
+    """
+    Extract product image URL.
+    """
+
+    locator = card.locator("img")
+
+    if await locator.count() == 0:
+        return None
+
+    image = locator.first
+
+    # Normal image
+    image_src = await image.get_attribute(
+        "src",
+        timeout=3000,
+    )
+
+    if image_src:
+        return image_src
+
+    # Lazy-loaded image
+    image_src = await image.get_attribute(
+        "data-src",
+        timeout=3000,
+    )
+
+    if image_src:
+        return image_src
+
+    # srcset fallback
+    image_src = await image.get_attribute(
+        "srcset",
+        timeout=3000,
+    )
+
+    if image_src:
+        # srcset may contain multiple URLs, Take the first one.
+        return image_src.split(",")[0].strip().split(" ")[0]
+
+    return None
+
+
+# ============================================================
+# CARD HELPERS
+# ============================================================
+
+
+async def get_product_card(product: Locator) -> Locator:
+    """
+    Find the actual product card inside a Flipkart result.
+    """
+
+    data_tkid = product.locator("[data-tkid]")
+
+    if await data_tkid.count() > 0:
+        return data_tkid.first
+
+    return product
+
+
+async def get_product_data(
+    card: Locator,
+    base_url: str,
+) -> dict:
+    """
+    Extract all supported fields from one product card.
+    """
+
+    name = await get_product_name(card)
+    price = await get_product_price(card)
+    rating = await get_product_rating(card)
+    product_url = await get_product_url(
+        card,
+        base_url,
+    )
+
+    image_src = await get_product_image(card)
+
+    return {
+        "type": "product",
+        "name": name,
+        "price": price,
+        "rating": rating,
+        "product_url": product_url,
+        "image_src": image_src,
+        "platform": "flipkart",
+    }
