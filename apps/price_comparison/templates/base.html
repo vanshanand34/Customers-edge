@@ -2,10 +2,14 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>{% block title %} Customer's Edge {% endblock %}</title>
+
+    {% block title %}
+    <title>Customer's Edge</title>
+    {% endblock %}
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    {% block title %} {% endblock %} {% load static %}
+    {% load static %}
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
