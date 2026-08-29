@@ -1,11 +1,6 @@
+from django.contrib import messages
 from django.shortcuts import render
 from django.views.generic.base import View
-from django.contrib import messages
-
-# from scripts.temp import get_temp_data
-
-import logging
-# Create your views here.
 
 
 class HomeView(View):
@@ -26,6 +21,7 @@ class HomeView(View):
             {"data": [], "search_text": search_text},
         )
 
-class AboutMeView(View):
+
+class AboutView(View):
     def get(self, request, *args, **kwargs):
-        return render(request, "about-me.html")
+        return render(request, "about.html")
