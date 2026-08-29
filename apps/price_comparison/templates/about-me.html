@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+<title>About Me</title>
+{% endblock %}
+
+
+{% block content %}
+{{block.super}}
+<div>
+    <div>
+        <h2>About Me</h2>
+    </div>
+
+    <!-- About me card -->
+    <div>
+        <div class="about-me-card">
+            <div class="about-me-card-image">
+                <img src="{% static 'assets/developer.png' %}" alt="Developer">
+            </div>
+            <div class="about-me-card-text">
+                <h3>Developer</h3>
+                <p>
+                    I am a developer with a passion for creating innovative and user-friendly web applications. I am
+                    currently working as a freelance web developer and have experience in a wide range of technologies,
+                    including HTML, CSS, JavaScript, Python, and Django.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
