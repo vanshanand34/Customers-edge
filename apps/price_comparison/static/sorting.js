@@ -35,6 +35,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     for (let i = 0; i < rows.length; i++) {
       const product = searchResults[i];
+      rows[i].children[0].children[0].href = product.product_url;
+      rows[i].children[0].children[0].children[0].src = product.image_src;
+      rows[i].children[0].children[0].children[0].alt = product.product_name;
       rows[i].children[1].textContent = truncateWords(product.name, 8);
       rows[i].children[2].textContent = parseFloatCustom(product.price);
       rows[i].children[3].innerHTML = `
