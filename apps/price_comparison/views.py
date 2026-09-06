@@ -17,7 +17,6 @@ class HomeView(View):
         return render(
             request,
             "search-results.html",
-            # {"data": search_results, "search_text": search_text},
             {"data": [], "search_text": search_text},
         )
 

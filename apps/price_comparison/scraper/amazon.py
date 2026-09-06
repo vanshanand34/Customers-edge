@@ -1,5 +1,3 @@
-import json
-
 from playwright.async_api import Locator, async_playwright
 
 from .utils import (
@@ -232,13 +230,11 @@ async def scrape_amazon(search_text: str):
     except Exception as error:
         print("Amazon scraper error:", error)
 
-        yield json.dumps(
-            {
-                "type": "error",
-                "platform": "amazon",
-                "message": str(error),
-            }
-        )
+        yield {
+            "type": "error",
+            "platform": "amazon",
+            "message": str(error),
+        }
 
     print(
         "Amazon exception count:",

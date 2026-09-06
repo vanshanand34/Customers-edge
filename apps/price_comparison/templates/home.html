@@ -1,5 +1,4 @@
-{% extends 'base.html' %}
-
+{% extends 'base.html' %} 
 {% load static %}
 
 {% block title %}
@@ -13,105 +12,102 @@
 
 
 {% block content %}
+
 {{block.super}}
-    <div id="search-section">
-        <div class="main-container">
-            <div class="search-section">
-                <h1 class="heading">
-                    Search & Compare Prices
-                </h1>
-                <div class="sub-heading">
-                    Compare Prices & Grab the Best Deals Instantly!
-                </div>
-                <div class="form-container">
-                    <form action="" id="search_form" method="post">
-                        {% csrf_token %}
-                        <div class="search-main">
-                            <div class="search-container">
-                                <div class="search-bar">
-                                    <input
-                                        type="text"
-                                        id="search_text"
-                                        name="search_text"
-                                        placeholder="Search for a product..."
-                                        aria-label="Search for a product"
-                                        autocomplete="off"
-                                        required
-                                    />
-                                    <button class="search-icon" type="submit" title="Search">
-                                        <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="18" height="18"
-                                            viewBox="0 0 64 64">
-                                            <path
-                                                d="M 27 9 C 17.075 9 9 17.075 9 27 C 9 36.925 17.075 45 27 45 C 31.129213 45 34.9263 43.587367 37.966797 41.240234 L 51.048828 54.322266 C 51.952828 55.226266 53.418266 55.226266 54.322266 54.322266 C 55.226266 53.418266 55.226266 51.952828 54.322266 51.048828 L 41.240234 37.966797 C 43.587367 34.9263 45 31.129213 45 27 C 45 17.075 36.925 9 27 9 z M 27 13 C 34.719 13 41 19.281 41 27 C 41 34.719 34.719 41 27 41 C 19.281 41 13 34.719 13 27 C 13 19.281 19.281 13 27 13 z">
-                                            </path>
-                                        </svg>
-                                    </button>
 
-                                </div>
-                                <button type="submit" class="btn-submit">Search</button>
-                            </div>
-                        </div>
-
-                    </form>
-
-                </div>
+<div id="search-section">
+  <div class="main-container">
+    <div class="search-section">
+      <h1 class="heading">Search & Compare Prices</h1>
+      <div class="sub-heading">
+        Compare Prices & Grab the Best Deals Instantly!
+      </div>
+      <div class="form-container">
+        <form action="" id="search_form" method="post">
+          {% csrf_token %}
+          <div class="search-main">
+            <div class="search-container">
+              <div class="search-bar">
+                <input
+                  type="text"
+                  id="search_text"
+                  name="search_text"
+                  placeholder="Search for a product..."
+                  aria-label="Search for a product"
+                  autocomplete="off"
+                  required
+                />
+                <button class="search-icon" type="submit" title="Search">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    x="0px"
+                    y="0px"
+                    width="18"
+                    height="18"
+                    viewBox="0 0 64 64"
+                  >
+                    <path
+                      d="M 27 9 C 17.075 9 9 17.075 9 27 C 9 36.925 17.075 45 27 45 C 31.129213 45 34.9263 43.587367 37.966797 41.240234 L 51.048828 54.322266 C 51.952828 55.226266 53.418266 55.226266 54.322266 54.322266 C 55.226266 53.418266 55.226266 51.952828 54.322266 51.048828 L 41.240234 37.966797 C 43.587367 34.9263 45 31.129213 45 27 C 45 17.075 36.925 9 27 9 z M 27 13 C 34.719 13 41 19.281 41 27 C 41 34.719 34.719 41 27 41 C 19.281 41 13 34.719 13 27 C 13 19.281 19.281 13 27 13 z"
+                    ></path>
+                  </svg>
+                </button>
+              </div>
+              <button type="submit" class="btn-submit">Search</button>
             </div>
-        </div>
+          </div>
+        </form>
+      </div>
     </div>
+  </div>
+</div>
 
-
-    <div class="main-container">
-
-        <div class="trending-head">
-            <div class="trending-head-text">
-                <div>
-                    Trending Searches
-                </div>
-                <span class="material-symbols-outlined">
-                    trending_up
-                </span>
-            </div>
-        </div>
-        <div class="trending-body">
-            {% include 'components/trending-card.html' with trending_text="Smart Phones" img_src="assets/smart-phone.jpg" %}
-
-            {% include 'components/trending-card.html' with trending_text='Electric scooters' img_src="assets/electric-scooter.webp" %}
-
-            {% include 'components/trending-card.html' with trending_text="smartwatches for fitness tracking" img_src="assets/smart-watch.avif" %}
-
-            {% include 'components/trending-card.html' with trending_text=" Best Bluetooth Speakers" img_src="assets/bluetooth-speaker.webp" %}
-
-            {% include 'components/trending-card.html' with trending_text="Top wireless earbuds" img_src="assets/earbuds.jpg" %}
-
-            {% include 'components/trending-card.html' with trending_text="Gaming Laptops" img_src="assets/gaming-laptop.avif" %}
-
-            {% include 'components/trending-card.html' with trending_text="Cheap Outdoor furniture" img_src="assets/furniture.jpg" %}
-
-            {% include 'components/trending-card.html' with trending_text="Affordable gardening tools" img_src="assets/gardening.webp" %}
-
-        </div>
+<div class="main-container">
+  <div class="trending-head">
+    <div class="trending-head-text">
+      <div>Trending Searches</div>
+      <span class="material-symbols-outlined"> trending_up </span>
     </div>
+  </div>
+  <div class="trending-body">
+    {% include 'components/trending-card.html' with trending_text="Smart Phones"
+    img_src="assets/smart-phone.jpg" %} {% include
+    'components/trending-card.html' with trending_text='Electric scooters'
+    img_src="assets/electric-scooter.webp" %} {% include
+    'components/trending-card.html' with trending_text="smartwatches for fitness
+    tracking" img_src="assets/smart-watch.avif" %} {% include
+    'components/trending-card.html' with trending_text=" Best Bluetooth
+    Speakers" img_src="assets/bluetooth-speaker.webp" %} {% include
+    'components/trending-card.html' with trending_text="Top wireless earbuds"
+    img_src="assets/earbuds.jpg" %} {% include 'components/trending-card.html'
+    with trending_text="Gaming Laptops" img_src="assets/gaming-laptop.avif" %}
+    {% include 'components/trending-card.html' with trending_text="Cheap Outdoor
+    furniture" img_src="assets/furniture.jpg" %} {% include
+    'components/trending-card.html' with trending_text="Affordable gardening
+    tools" img_src="assets/gardening.webp" %}
+  </div>
+</div>
 
-    <form action="" id="search_form_auto" method="post">
-        {% csrf_token %}
-        <input type="hidden" name="search_text" id="search_text_auto">
-    </form>
+<form action="" id="search_form_auto" method="post">
+  {% csrf_token %}
+  <input type="hidden" name="search_text" id="search_text_auto" />
+</form>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const trendingCardsContainer = document.getElementsByClassName('trending-body')[0];
-            trendingCardsContainer?.addEventListener('click', (event) => {
-
-                if (!event.target.closest('.trending-item')) {
-                    console.log("No")
-                    return;
-                }
-                const searchText = event.target.closest('.trending-item').querySelector('.trending-text').innerText;
-                document.getElementById('search_text_auto').value = searchText;
-                document.getElementById('search_form_auto').submit();
-            })
-        });
-    </script>
-
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const trendingCardsContainer =
+      document.getElementsByClassName("trending-body")[0];
+    trendingCardsContainer?.addEventListener("click", (event) => {
+      if (!event.target.closest(".trending-item")) {
+        console.log("No");
+        return;
+      }
+      const searchText = event.target
+        .closest(".trending-item")
+        .querySelector(".trending-text").innerText;
+      document.getElementById("search_text_auto").value = searchText;
+      document.getElementById("search_form_auto").submit();
+    });
+  });
+</script>
 
 {% endblock %}
