@@ -17,7 +17,6 @@ function escapeHTML(value) {
 
 function parseSearchResults() {
   let searchResultsCollections = searchResults;
-  const search_text = searchText;
   const searchTable = document.getElementById("search-table-body");
   const websocketUrl = "ws://" + window.location.host + "/ws/search-results/";
   const searchResultSocket = new WebSocket(websocketUrl);
@@ -133,7 +132,7 @@ function parseSearchResults() {
   searchResultSocket.onopen = function () {
     searchResultSocket.send(
       JSON.stringify({
-        search_text: search_text,
+        search_text: searchText,
       }),
     );
   };

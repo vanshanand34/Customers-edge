@@ -9,17 +9,8 @@ from .scraper.flipkart import scrape_flipkart
 
 class SearchResultsConsumer(AsyncWebsocketConsumer):
     async def connect(self):
-        loop = asyncio.get_running_loop()
-
-        print("================================")
-        print("ASYNCIO LOOP:")
-        print(type(loop))
-        print("================================")
-
         self.search_text = ""
-
         await self.accept()
-
         print("WebSocket connected")
 
     async def disconnect(self, code):

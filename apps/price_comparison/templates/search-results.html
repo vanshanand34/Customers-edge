@@ -19,15 +19,14 @@
     {% include 'navbar.html' %}
     <div class="main-container">
       <div class="form-container">
-        <form action="" id="search_form" method="post">
-          {% csrf_token %}
+        <form action="{% url 'search' %}" id="search-form" method="get">
           <div class="search-main">
             <div class="search-container">
               <div class="search-bar">
                 <input
                   type="text"
-                  id="search_text"
-                  name="search_text"
+                  id="search-text"
+                  name="search-text"
                   placeholder="Search item..."
                   value="{{search_text}}"
                   required
@@ -47,12 +46,10 @@
                   </svg>
                 </button>
               </div>
-              <!-- <button type="submit" class="btn-submit">Search</button> -->
             </div>
           </div>
         </form>
       </div>
-      <!-- <div class="heading-container"></div> -->
 
       <div class="results-header">
         <div class="results-title">
@@ -95,6 +92,6 @@
       var searchResults = [];
     </script>
     <script src="{% static 'parseSearchResults.js' %}"></script>
-    <script src="{% static 'script.js' %}"></script>
+    <script src="{% static 'sorting.js' %}"></script>
   </body>
 </html>

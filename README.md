@@ -1,12 +1,12 @@
 # Customers Edge 🛒📊
 
-**Customers Edge** is a Django-based price comparison website that scrapes real-time data from major e-commerce platforms like **Amazon** and **Flipkart**. 
+**Customers Edge** is a Django-based price comparison website that scrapes real-time data from major e-commerce platforms like **Amazon** and **Flipkart**.
 
 It helps users make informed decisions by comparing product prices across multiple sites in a fast, responsive interface.
 
 ---
 
-##  Features
+## Features
 
 - **Search Products** — Enter any product name to get the latest listings from Amazon and Flipkart.
 - **Real-time Scraping** — Uses Selenium to dynamically scrape product details during each search.
@@ -26,5 +26,9 @@ It helps users make informed decisions by comparing product prices across multip
 | Scraping    | Selenium WebDriver |
 | Database    | SQLite (default)   |
 
----
+## Run project
 
+- Navigate to project directory `cd customers-edge`
+- Run the project `./run`, Enter `yes` when prompted for collecting static files
+
+---
