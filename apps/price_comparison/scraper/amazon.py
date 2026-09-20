@@ -1,9 +1,8 @@
+from urllib.parse import quote_plus
+
 from playwright.async_api import Locator, async_playwright
 
-from .utils import (
-    convert_str_to_url,
-    create_browser_context,
-)
+from .utils import create_browser_context
 
 
 # Product name
@@ -138,7 +137,7 @@ async def scrape_amazon(search_text: str):
 
     base_url = "https://www.amazon.in"
 
-    search_text = convert_str_to_url(search_text)
+    search_text = quote_plus(search_text)
 
     search_url = f"{base_url}/s?k={search_text}&ref=nb_sb_noss"
 

@@ -7,8 +7,9 @@ class HomeView(View):
     def get(self, request, *args, **kwargs):
         return render(request, "home.html")
 
-    def post(self, request, *args, **kwargs):
-        search_text = request.POST.get("search_text")
+class SearchView(View):
+    def get(self, request, *args, **kwargs):
+        search_text = request.GET.get("search-text")
         if not search_text:
             messages.error(request, "Please enter a search text")
             return render(request, "home.html")

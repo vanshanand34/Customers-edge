@@ -23,15 +23,14 @@
         Compare Prices & Grab the Best Deals Instantly!
       </div>
       <div class="form-container">
-        <form action="" id="search_form" method="post">
-          {% csrf_token %}
+        <form action="{% url 'search' %}" id="search-form" method="get">
           <div class="search-main">
             <div class="search-container">
               <div class="search-bar">
                 <input
                   type="text"
-                  id="search_text"
-                  name="search_text"
+                  id="search-text"
+                  name="search-text"
                   placeholder="Search for a product..."
                   aria-label="Search for a product"
                   autocomplete="off"
@@ -69,27 +68,28 @@
     </div>
   </div>
   <div class="trending-body">
-    {% include 'components/trending-card.html' with trending_text="Smart Phones"
-    img_src="assets/smart-phone.jpg" %} {% include
-    'components/trending-card.html' with trending_text='Electric scooters'
-    img_src="assets/electric-scooter.webp" %} {% include
-    'components/trending-card.html' with trending_text="smartwatches for fitness
-    tracking" img_src="assets/smart-watch.avif" %} {% include
-    'components/trending-card.html' with trending_text=" Best Bluetooth
-    Speakers" img_src="assets/bluetooth-speaker.webp" %} {% include
-    'components/trending-card.html' with trending_text="Top wireless earbuds"
-    img_src="assets/earbuds.jpg" %} {% include 'components/trending-card.html'
-    with trending_text="Gaming Laptops" img_src="assets/gaming-laptop.avif" %}
-    {% include 'components/trending-card.html' with trending_text="Cheap Outdoor
-    furniture" img_src="assets/furniture.jpg" %} {% include
-    'components/trending-card.html' with trending_text="Affordable gardening
-    tools" img_src="assets/gardening.webp" %}
+
+    {% include 'components/trending-card.html' with trending_text="Smart Phones" img_src="assets/smart-phone.jpg" %}
+    
+    {% include 'components/trending-card.html' with trending_text='Electric scooters' img_src="assets/electric-scooter.webp" %}
+     
+    {% include 'components/trending-card.html' with trending_text="smartwatches for fitness tracking" img_src="assets/smart-watch.avif" %}
+    
+    {% include 'components/trending-card.html' with trending_text=" Best Bluetooth Speakers" img_src="assets/bluetooth-speaker.webp" %}
+    
+    {% include 'components/trending-card.html' with trending_text="Top wireless earbuds" img_src="assets/earbuds.jpg" %}
+    
+    {% include 'components/trending-card.html' with trending_text="Gaming Laptops" img_src="assets/gaming-laptop.avif" %}
+    
+    {% include 'components/trending-card.html' with trending_text="Cheap Outdoor furniture" img_src="assets/furniture.jpg" %}
+    
+    {% include 'components/trending-card.html' with trending_text="Affordable gardening tools" img_src="assets/gardening.webp" %}
+
   </div>
 </div>
 
-<form action="" id="search_form_auto" method="post">
-  {% csrf_token %}
-  <input type="hidden" name="search_text" id="search_text_auto" />
+<form action="{% url 'search' %}" id="search-form-auto" method="get">
+  <input type="hidden" name="search-text" id="search-text-auto" />
 </form>
 
 <script>
@@ -104,8 +104,8 @@
       const searchText = event.target
         .closest(".trending-item")
         .querySelector(".trending-text").innerText;
-      document.getElementById("search_text_auto").value = searchText;
-      document.getElementById("search_form_auto").submit();
+      document.getElementById("search-text-auto").value = searchText;
+      document.getElementById("search-form-auto").submit();
     });
   });
 </script>

@@ -91,7 +91,7 @@ body {
     0 3px 10px rgba(80, 50, 100, 0.08);
 }
 
-#search_text {
+#search-text {
   flex-grow: 1;
 
   min-width: 0;
@@ -111,7 +111,7 @@ body {
   font-size: large;
 }
 
-#search_text::placeholder {
+#search-text::placeholder {
   color: #9993a3;
 }
 
@@ -539,7 +539,7 @@ tr.fade-in {
     height: 2.8em;
   }
 
-  #search_text {
+  #search-text {
     font-size: 0.9em;
   }
 

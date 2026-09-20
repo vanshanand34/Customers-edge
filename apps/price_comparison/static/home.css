@@ -216,7 +216,7 @@
   transform: translateY(-1px);
 }
 
-#search_text {
+#search-text {
   box-sizing: border-box;
 
   padding: 0.5em 1.1rem;
@@ -236,7 +236,7 @@
   background: transparent;
 }
 
-#search_text::placeholder {
+#search-text::placeholder {
   color: #99929f;
 }
 
@@ -525,7 +525,7 @@
     width: 80%;
   }
 
-  #search_text {
+  #search-text {
     padding: 0.5em 0.8em;
 
     font-size: 0.9em;

@@ -19,15 +19,14 @@
     {% include 'navbar.html' %}
     <div class="main-container">
       <div class="form-container">
-        <form action="" id="search_form" method="post">
-          {% csrf_token %}
+        <form action="{% url 'search' %}" id="search-form" method="get">
           <div class="search-main">
             <div class="search-container">
               <div class="search-bar">
                 <input
                   type="text"
-                  id="search_text"
-                  name="search_text"
+                  id="search-text"
+                  name="search-text"
                   placeholder="Search item..."
                   value="{{search_text}}"
                   required
