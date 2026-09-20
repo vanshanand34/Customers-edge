@@ -644,3 +644,19 @@ tr.fade-in {
   color: #888;
   font-size: 12px;
 }
+
+.spinner {
+  width: 48px;
+  height: 48px;
+  margin: 0 auto;
+  border: 5px solid #eaeaea; /* Light gray track background */
+  border-top-color: #3498db; /* Blue spinning accent */
+  border-radius: 50%; /* Turns the square div into a circle */
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg); /* Smooth hardware-accelerated rotation */
+  }
+}

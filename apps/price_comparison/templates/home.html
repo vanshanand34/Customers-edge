@@ -67,6 +67,7 @@
       <span class="material-symbols-outlined"> trending_up </span>
     </div>
   </div>
+
   <div class="trending-body">
 
     {% include 'components/trending-card.html' with trending_text="Smart Phones" img_src="assets/smart-phone.jpg" %}
@@ -85,8 +86,32 @@
     
     {% include 'components/trending-card.html' with trending_text="Affordable gardening tools" img_src="assets/gardening.webp" %}
 
+    {% for search_history in search_history_list %}
+      {% include 'components/trending-card.html' with trending_text=search_history.text img_url=search_history.url %}
+    {% endfor %}
+
   </div>
+  
+  <br />
+
 </div>
+
+<div class="main-container">
+  <div class="trending-head">
+    <div class="trending-head-text">
+      <div>Recent Searches</div>
+      <span class="material-symbols-outlined"> trending_up </span>
+    </div>
+  </div>
+
+  <div class="trending-body">
+    {% for search_history in search_history_list %}
+      {% include 'components/trending-card.html' with trending_text=search_history.text img_url=search_history.url %}
+    {% endfor %}      
+  </div>
+
+</div>
+
 
 <form action="{% url 'search' %}" id="search-form-auto" method="get">
   <input type="hidden" name="search-text" id="search-text-auto" />

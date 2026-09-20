@@ -2,7 +2,14 @@
 <div class="trending-item">
   <div class="trending-subitem">
     <div class="trending-img">
-      <img src="{% static img_src %}" alt="" />
+      <img
+        {% if img_url %}
+          src="{{ img_url }}"
+        {% else %}
+          src="{% static img_src %}"
+        {% endif %}
+        alt=""
+      />
     </div>
     <div class="trending-text">{{ trending_text }}</div>
   </div>

@@ -1,7 +1,10 @@
 import asyncio
 import json
 
+from channels.db import database_sync_to_async
 from channels.generic.websocket import AsyncWebsocketConsumer
+
+from apps.price_comparison.utils import SearchHistoryHelper
 
 from .scraper.amazon import scrape_amazon
 from .scraper.flipkart import scrape_flipkart
@@ -76,11 +79,25 @@ class SearchResultsConsumer(AsyncWebsocketConsumer):
 
         print("Starting search for:", self.search_text)
 
+        session = self.scope.get("session")
+
+        if not session:
+            raise RuntimeError("Session is not available in the scope")
+
         async for product in scrape_amazon(self.search_text):
+            SearchHistoryHelper.update_search_url_if_url_empty(
+                session, self.search_text, product.get("image_src", "")
+            )
             await self.send(json.dumps(product))
 
         async for product in scrape_flipkart(self.search_text):
+            SearchHistoryHelper.update_search_url_if_url_empty(
+                session, self.search_text, product.get("image_src", "")
+            )
             await self.send(json.dumps(product))
+
+
+        await database_sync_to_async(session.save)()
 
         print("All scraping completed")
 
