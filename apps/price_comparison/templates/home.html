@@ -36,7 +36,8 @@
                   autocomplete="off"
                   required
                 />
-                <button class="search-icon" type="submit" title="Search">
+
+                <button class="search-icon" type="submit" title="Search" aria-label="Search">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     x="0px"
@@ -51,6 +52,13 @@
                   </svg>
                 </button>
               </div>
+
+              <div
+                class="recent-searches"
+                id="recent-searches"
+                style="display: none;"
+              ></div>
+
               <button type="submit" class="btn-submit">Search</button>
             </div>
           </div>
@@ -86,31 +94,13 @@
     
     {% include 'components/trending-card.html' with trending_text="Affordable gardening tools" img_src="assets/gardening.webp" %}
 
-    {% for search_history in search_history_list %}
-      {% include 'components/trending-card.html' with trending_text=search_history.text img_url=search_history.url %}
-    {% endfor %}
-
   </div>
   
   <br />
 
 </div>
 
-<div class="main-container">
-  <div class="trending-head">
-    <div class="trending-head-text">
-      <div>Recent Searches</div>
-      <span class="material-symbols-outlined"> trending_up </span>
-    </div>
-  </div>
 
-  <div class="trending-body">
-    {% for search_history in search_history_list %}
-      {% include 'components/trending-card.html' with trending_text=search_history.text img_url=search_history.url %}
-    {% endfor %}      
-  </div>
-
-</div>
 
 
 <form action="{% url 'search' %}" id="search-form-auto" method="get">
@@ -133,6 +123,10 @@
       document.getElementById("search-form-auto").submit();
     });
   });
+
+  const recentSearches = {{ search_history_list|safe }};
+  // const searchHistory = JSON.parse(`{{ search_history_list|safe }}`);
 </script>
+<script src="{% static 'showRecentSearches.js' %}"></script>
 
 {% endblock %}
