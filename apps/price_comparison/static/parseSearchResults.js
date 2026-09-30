@@ -22,7 +22,8 @@ function escapeHTML(value) {
 function parseSearchResults() {
   let searchResultsCollections = searchResults;
   const searchTable = document.getElementById("search-table-body");
-  const websocketUrl = "ws://" + window.location.host + "/ws/search-results/";
+  const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
+  const websocketUrl = `${protocol}//${window.location.host}/ws/search-results/`;
   const searchResultSocket = new WebSocket(websocketUrl);
 
   searchResultSocket.onmessage = function (event) {
