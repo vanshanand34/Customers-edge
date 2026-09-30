@@ -91,7 +91,7 @@ body {
     0 3px 10px rgba(80, 50, 100, 0.08);
 }
 
-#search_text {
+#search-text {
   flex-grow: 1;
 
   min-width: 0;
@@ -111,7 +111,7 @@ body {
   font-size: large;
 }
 
-#search_text::placeholder {
+#search-text::placeholder {
   color: #9993a3;
 }
 
@@ -539,7 +539,7 @@ tr.fade-in {
     height: 2.8em;
   }
 
-  #search_text {
+  #search-text {
     font-size: 0.9em;
   }
 
@@ -643,4 +643,20 @@ tr.fade-in {
   background: #f3f3f3;
   color: #888;
   font-size: 12px;
+}
+
+.spinner {
+  width: 48px;
+  height: 48px;
+  margin: 0 auto;
+  border: 5px solid #eaeaea; /* Light gray track background */
+  border-top-color: #3498db; /* Blue spinning accent */
+  border-radius: 50%; /* Turns the square div into a circle */
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg); /* Smooth hardware-accelerated rotation */
+  }
 }

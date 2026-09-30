@@ -1,11 +1,15 @@
 function truncateWords(text, truncateLength) {
   if (!text) return "";
+
   const words = text?.split(" ");
+
   if (words?.length <= truncateLength) return text;
+
   let truncatedStr = "";
   for (let i = 0; i < truncateLength; i++) {
     truncatedStr += words[i] + " ";
   }
+
   return truncatedStr + "...";
 }
 
@@ -17,23 +21,31 @@ function escapeHTML(value) {
 
 function parseSearchResults() {
   let searchResultsCollections = searchResults;
-  const search_text = searchText;
   const searchTable = document.getElementById("search-table-body");
   const websocketUrl = "ws://" + window.location.host + "/ws/search-results/";
   const searchResultSocket = new WebSocket(websocketUrl);
 
   searchResultSocket.onmessage = function (event) {
     const data = JSON.parse(event.data);
+
     console.log(data);
+
     if (data?.message?.includes("No results found")) {
       const tableRow = document.createElement("tr");
+
       tableRow.innerHTML = `
           <td class="prod-name" data-value="${data.name}">
             No results found
           </td>
         `;
+
       searchTable.appendChild(tableRow);
       return;
+    }
+
+    if (searchResultsCollections.length == 0) {
+      // Remove the spinner element when the first product is received
+      searchTable.innerHTML = "";
     }
 
     if (data.type != "product") {
@@ -41,16 +53,15 @@ function parseSearchResults() {
       return;
     }
 
-    // console.log(data);
     data.price = parseFloatCustom(data.price);
     data.rating = parseFloatCustom(data.rating);
-    searchResultsCollections.push(data);
-    const tableRow = document.createElement("tr");
-    const truncatedText = truncateWords(data.name, 8);
 
+    searchResultsCollections.push(data);
+
+    const tableRow = document.createElement("tr");
+    const truncatedText = escapeHTML(truncateWords(data.name, 8));
     const productName = escapeHTML(data.name);
     const platform = escapeHTML(data.platform);
-    const truncatedName = escapeHTML(truncatedText);
     const productImageSrc = escapeHTML(data.image_src);
     const productUrl = escapeHTML(data.product_url);
 
@@ -118,6 +129,7 @@ function parseSearchResults() {
     `;
 
     searchTable.appendChild(tableRow);
+
     const rowIndex = searchTable.children.length - 1;
     const delay = rowIndex * 60;
     addAnimationClass(tableRow, delay);
@@ -133,7 +145,7 @@ function parseSearchResults() {
   searchResultSocket.onopen = function () {
     searchResultSocket.send(
       JSON.stringify({
-        search_text: search_text,
+        search_text: searchText,
       }),
     );
   };

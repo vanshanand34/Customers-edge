@@ -1,4 +1,3 @@
-import json
 from urllib.parse import quote_plus
 
 from playwright.async_api import Locator, async_playwright
@@ -151,13 +150,11 @@ async def scrape_flipkart(search_text: str):
             error,
         )
 
-        yield json.dumps(
-            {
-                "type": "error",
-                "platform": "flipkart",
-                "message": str(error),
-            }
-        )
+        yield {
+            "type": "error",
+            "platform": "flipkart",
+            "message": str(error),
+        }
 
     print(
         "Flipkart exception count:",
