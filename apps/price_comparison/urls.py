@@ -10,5 +10,3 @@ urlpatterns = [
     path("about/", views.AboutView.as_view(), name="about"),
     path("", views.HomeView.as_view(), name="home"),
 ]
-
-handler404 = views.redirect_to_home
