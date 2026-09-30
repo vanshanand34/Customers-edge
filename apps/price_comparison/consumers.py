@@ -1,5 +1,6 @@
 import asyncio
 import json
+import logging
 
 from channels.db import database_sync_to_async
 from channels.generic.websocket import AsyncWebsocketConsumer
@@ -9,15 +10,16 @@ from apps.price_comparison.utils import SearchHistoryHelper
 from .scraper.amazon import scrape_amazon
 from .scraper.flipkart import scrape_flipkart
 
+logger = logging.getLogger(__name__)
 
 class SearchResultsConsumer(AsyncWebsocketConsumer):
     async def connect(self):
         self.search_text = ""
         await self.accept()
-        print("WebSocket connected")
+        logger.info("WebSocket connected")
 
     async def disconnect(self, code):
-        print("WebSocket disconnected:", code)
+        logger.info("WebSocket disconnected: %s", code)
 
     async def receive(self, text_data=None, bytes_data=None):
         if not text_data:
@@ -26,7 +28,7 @@ class SearchResultsConsumer(AsyncWebsocketConsumer):
         try:
             text_data_json = json.loads(text_data)
 
-            print("Received from frontend:", text_data_json)
+            logger.info("Received from frontend: %s", text_data_json)
 
             self.search_text = text_data_json.get("search_text", "").strip()
 
@@ -54,7 +56,7 @@ class SearchResultsConsumer(AsyncWebsocketConsumer):
             )
 
         except Exception as error:
-            print("Receive error:", error)
+            logger.exception("Received error")
 
             await self.send(
                 text_data=json.dumps(
@@ -77,29 +79,36 @@ class SearchResultsConsumer(AsyncWebsocketConsumer):
         for threads or queues.
         """
 
-        print("Starting search for:", self.search_text)
+        logger.info("Starting search for: %s", self.search_text)
 
         session = self.scope.get("session")
 
         if not session:
             raise RuntimeError("Session is not available in the scope")
 
-        async for product in scrape_amazon(self.search_text):
-            SearchHistoryHelper.update_search_url_if_url_empty(
-                session, self.search_text, product.get("image_src", "")
-            )
-            await self.send(json.dumps(product))
 
-        async for product in scrape_flipkart(self.search_text):
-            SearchHistoryHelper.update_search_url_if_url_empty(
-                session, self.search_text, product.get("image_src", "")
-            )
-            await self.send(json.dumps(product))
+        try:
+            async for product in scrape_amazon(self.search_text):
+                SearchHistoryHelper.update_search_url_if_url_empty(
+                    session, self.search_text, product.get("image_src", "")
+                )
+                await self.send(json.dumps(product))
+        except Exception:
+            logger.exception("Error occurred while scraping Amazon")
 
+        try:
+            async for product in scrape_flipkart(self.search_text):
+                SearchHistoryHelper.update_search_url_if_url_empty(
+                    session, self.search_text, product.get("image_src", "")
+                )
+                await self.send(json.dumps(product))
+        except Exception:
+            logger.exception("Error occurred while scraping Flipkart")
+        
 
         await database_sync_to_async(session.save)()
 
-        print("All scraping completed")
+        logger.info("All scraping completed")
 
         # Optional completion message.
         await self.send(

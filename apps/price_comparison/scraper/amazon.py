@@ -179,7 +179,7 @@ async def scrape_amazon(search_text: str):
                     product_count,
                 )
 
-                for index in range(product_count):
+                for index in range(min(product_count, 10)):  # Limit to 10 products
                     try:
                         product = products.nth(index)
 
