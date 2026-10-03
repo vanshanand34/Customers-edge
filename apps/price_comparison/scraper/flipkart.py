@@ -32,15 +32,16 @@ async def scrape_flipkart(search_text: str, browser: Browser):
     exceptions = []
     link_to_product_data_map = {}
 
+    context = await create_browser_context(browser)
+
+    logger.debug(
+        "Created Flipkart browser context at %.2f seconds",
+        time.perf_counter() - start_time,
+    )
+
+    page = await context.new_page()
+
     try:
-        context = await create_browser_context(browser)
-
-        logger.debug(
-            "Created Flipkart browser context at %.2f seconds",
-            time.perf_counter() - start_time,
-        )
-
-        page = await context.new_page()
         await page.route("**/*", block_unnecessary_resources)
 
         await page.goto(
@@ -137,6 +138,11 @@ async def scrape_flipkart(search_text: str, browser: Browser):
 
     except Exception as error:
         logger.error("Flipkart scraper error: %s", error)
+
+        await page.screenshot(
+            path="/tmp/flipkart-debug.png",
+            full_page=True,
+        )
 
         yield {
             "type": "error",
