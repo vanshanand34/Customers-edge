@@ -1,14 +1,21 @@
+import logging
+import time
 from urllib.parse import quote_plus
 
-from playwright.async_api import Locator, async_playwright
+from playwright.async_api import Browser, Locator
 
 from .utils import (
+    block_unnecessary_resources,
     check_if_row_is_empty,
     create_browser_context,
 )
 
+logger = logging.getLogger(__name__)
 
-async def scrape_flipkart(search_text: str):
+
+async def scrape_flipkart(search_text: str, browser: Browser):
+
+    start_time = time.perf_counter()
 
     if not search_text:
         return
@@ -19,136 +26,117 @@ async def scrape_flipkart(search_text: str):
 
     search_url = f"{base_url}/search?q={search_query}"
 
-    print("Flipkart URL:", search_url)
+    logger.debug("Flipkart URL: %s", search_url)
 
     exception_count = 0
     exceptions = []
     link_to_product_data_map = {}
 
     try:
-        async with async_playwright() as p:
-            browser = await p.chromium.launch(headless=True)
+        context = await create_browser_context(browser)
 
-            context = await create_browser_context(browser)
+        logger.debug(
+            "Created Flipkart browser context at %.2f seconds",
+            time.perf_counter() - start_time,
+        )
 
-            page = await context.new_page()
+        page = await context.new_page()
+        await page.route("**/*", block_unnecessary_resources)
 
+        await page.goto(
+            search_url,
+            wait_until="domcontentloaded",
+            timeout=10000,
+        )
+
+        logger.debug(
+            "Flipkart page loaded at %.2f seconds", time.perf_counter() - start_time
+        )
+
+        try:
+            close_button = page.locator("button._2KpZ6l")
+            await close_button.first.click(timeout=1000)
+            logger.debug("Closed Flipkart login popup")
+
+        except Exception:
+            logger.debug("Flipkart login popup not found")
+
+        # Allow products to render.
+
+        # PRODUCT CARDS
+        products = page.locator("div[data-id]")
+
+        product_count = await products.evaluate_all("products => products.length")
+
+        logger.debug("Flipkart products found: %d", product_count)
+
+        # Fallback
+        if product_count == 0:
+            logger.debug(
+                "Flipkart primary selector returned no products. Trying fallback."
+            )
+
+            await page.wait_for_selector("div:has(a[href*='/p/'])", timeout=5000)
+            products = page.locator("div:has(a[href*='/p/'])")
+
+            product_count = await products.evaluate_all("products => products.length")
+
+            logger.debug("Flipkart fallback products: %d", product_count)
+
+        # PROCESS PRODUCTS
+
+        logger.debug(
+            "Processing Flipkart products at %.2f seconds",
+            time.perf_counter() - start_time,
+        )
+
+        for index in range(min(product_count, 10)):  # Limit to 10 products
             try:
-                # Navigation
-                await page.goto(
-                    search_url,
-                    wait_until="domcontentloaded",
-                    timeout=30000,
+                product = products.nth(index)
+
+                card = await get_product_card(product)
+
+                # ----------------------------------------
+                # EXTRACT DATA
+                # ----------------------------------------
+
+                curr_prod_data = await get_product_data(
+                    card,
+                    base_url,
                 )
 
-                try:
-                    close_button = page.locator("button._2KpZ6l")
+                product_url = curr_prod_data.get("product_url")
 
-                    if await close_button.count() > 0:
-                        await close_button.first.click(timeout=3000)
-
-                        print("Closed Flipkart login popup")
-
-                except Exception:
-                    print("Flipkart login popup not found")
-
-                # Allow products to render.
-                await page.wait_for_timeout(1500)
-
-                # PRODUCT CARDS
-                products = page.locator("div._75nlfW")
-
-                product_count = await products.count()
-
-                print(
-                    "Flipkart products found:",
-                    product_count,
-                )
-
-                # Fallback
-                if product_count == 0:
-                    print(
-                        "Flipkart primary selector "
-                        "returned no products. "
-                        "Trying fallback."
+                if product_url in link_to_product_data_map:
+                    logger.debug(
+                        "Duplicate product: %s",
+                        curr_prod_data,
                     )
+                    continue
 
-                    products = page.locator("div:has(a[href*='/p/'])")
+                link_to_product_data_map[product_url] = curr_prod_data
 
-                    product_count = await products.count()
-
-                    print(
-                        "Flipkart fallback products:",
-                        product_count,
+                if check_if_row_is_empty(curr_prod_data):
+                    logger.debug(
+                        "Flipkart product is empty: %s",
+                        curr_prod_data,
                     )
+                    continue
 
-                # PROCESS PRODUCTS
+                yield curr_prod_data
 
-                for index in range(min(product_count, 10)):  # Limit to 10 products
-                    try:
-                        product = products.nth(index)
+            except Exception as error:
+                exception_count += 1
 
-                        card = await get_product_card(product)
+                exceptions.append(f"Flipkart product {index}: {error}")
 
-                        # ----------------------------------------
-                        # EXTRACT DATA
-                        # ----------------------------------------
-
-                        curr_prod_data = await get_product_data(
-                            card,
-                            base_url,
-                        )
-
-                        print(
-                            "Flipkart product:",
-                            curr_prod_data,
-                        )
-
-                        # ----------------------------------------
-                        # DEDUPLICATION
-                        # ----------------------------------------
-                        product_url = curr_prod_data.get("product_url")
-
-                        if product_url:
-                            if product_url in link_to_product_data_map:
-                                print(
-                                    "Duplicate product:",
-                                    curr_prod_data,
-                                )
-                                continue
-
-                            link_to_product_data_map[product_url] = curr_prod_data
-
-                        # ----------------------------------------
-                        # VALIDATION
-                        # ----------------------------------------
-
-                        if check_if_row_is_empty(curr_prod_data):
-                            print(
-                                "Flipkart product is empty:",
-                                curr_prod_data,
-                            )
-                            continue
-
-                        # ----------------------------------------
-                        # SEND TO FRONTEND
-                        # ----------------------------------------
-
-                        yield curr_prod_data
-
-                    except Exception as error:
-                        exception_count += 1
-
-                        exceptions.append(f"Flipkart product {index}: {error}")
-
-            finally:
-                await browser.close()
+        logger.debug(
+            "Processed Flipkart products at %.2f seconds",
+            time.perf_counter() - start_time,
+        )
 
     except Exception as error:
-        print(
-            "Flipkart scraper error:",
-            error,
-        )
+        logger.error("Flipkart scraper error: %s", error)
 
         yield {
             "type": "error",
@@ -156,18 +144,13 @@ async def scrape_flipkart(search_text: str):
             "message": str(error),
         }
 
-    print(
-        "Flipkart exception count:",
+    logger.debug(
+        "Flipkart exception count: %d",
         exception_count,
     )
 
     if exceptions:
-        print("\n".join(exceptions))
-
-
-# ============================================================
-# PRODUCT DETAIL HELPERS
-# ============================================================
+        logger.debug("Flipkart exceptions:\n%s", "\n".join(exceptions))
 
 
 async def get_product_name(card: Locator) -> str | None:
@@ -257,10 +240,6 @@ async def get_product_rating(card: Locator) -> float | None:
     other products on the search page cannot be accidentally
     picked up.
     """
-
-    # --------------------------------------------------------
-    # Preferred Flipkart rating selector
-    # --------------------------------------------------------
 
     locator = card.locator("div.MKiFS6")
 
