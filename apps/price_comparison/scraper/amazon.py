@@ -30,15 +30,16 @@ async def scrape_amazon(search_text: str, browser: Browser):
     exception_count = 0
     exceptions = []
 
+    context = await create_browser_context(browser)
+
+    logger.debug(
+        "Amazon browser context created at %.2f seconds",
+        time.perf_counter() - start_time,
+    )
+
+    page = await context.new_page()
+
     try:
-        context = await create_browser_context(browser)
-
-        logger.debug(
-            "Amazon browser context created at %.2f seconds",
-            time.perf_counter() - start_time,
-        )
-
-        page = await context.new_page()
         await page.route("**/*", block_unnecessary_resources)
         link_to_product_data_map = {}
 
@@ -108,6 +109,10 @@ async def scrape_amazon(search_text: str, browser: Browser):
 
     except Exception as error:
         logger.error("Amazon scraper error: %s", error)
+        await page.screenshot(
+            path="/tmp/amazon-debug.png",
+            full_page=True,
+        )
 
         yield {
             "type": "error",
