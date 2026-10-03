@@ -4,6 +4,7 @@ import logging
 
 from channels.db import database_sync_to_async
 from channels.generic.websocket import AsyncWebsocketConsumer
+from playwright.async_api import async_playwright
 
 from apps.price_comparison.utils import SearchHistoryHelper
 
@@ -11,6 +12,7 @@ from .scraper.amazon import scrape_amazon
 from .scraper.flipkart import scrape_flipkart
 
 logger = logging.getLogger(__name__)
+
 
 class SearchResultsConsumer(AsyncWebsocketConsumer):
     async def connect(self):
@@ -71,6 +73,38 @@ class SearchResultsConsumer(AsyncWebsocketConsumer):
     # SEARCH RESULTS
     # ==========================================================
 
+    async def send_amazon_results(self, browser, session):
+        """
+        Scrape Amazon products and send them to the frontend.
+        """
+
+        logger.info("Starting Amazon search for: %s", self.search_text)
+
+        try:
+            async for product in scrape_amazon(self.search_text, browser):
+                SearchHistoryHelper.update_search_url_if_url_empty(
+                    session, self.search_text, product.get("image_src", "")
+                )
+                await self.send(json.dumps(product))
+        except Exception:
+            logger.exception("Error occurred while scraping Amazon")
+
+    async def send_flipkart_results(self, browser, session):
+        """
+        Scrape Flipkart products and send them to the frontend.
+        """
+
+        logger.info("Starting Flipkart search for: %s", self.search_text)
+
+        try:
+            async for product in scrape_flipkart(self.search_text, browser):
+                SearchHistoryHelper.update_search_url_if_url_empty(
+                    session, self.search_text, product.get("image_src", "")
+                )
+                await self.send(json.dumps(product))
+        except Exception:
+            logger.exception("Error occurred while scraping Flipkart")
+
     async def send_search_results(self):
         """
         Run Amazon and Flipkart concurrently.
@@ -86,25 +120,15 @@ class SearchResultsConsumer(AsyncWebsocketConsumer):
         if not session:
             raise RuntimeError("Session is not available in the scope")
 
+        async with async_playwright() as p:
+            browser = await p.chromium.launch(headless=True)
 
-        try:
-            async for product in scrape_amazon(self.search_text):
-                SearchHistoryHelper.update_search_url_if_url_empty(
-                    session, self.search_text, product.get("image_src", "")
-                )
-                await self.send(json.dumps(product))
-        except Exception:
-            logger.exception("Error occurred while scraping Amazon")
+            await asyncio.gather(
+                self.send_flipkart_results(browser, session),
+                self.send_amazon_results(browser, session),
+            )
 
-        try:
-            async for product in scrape_flipkart(self.search_text):
-                SearchHistoryHelper.update_search_url_if_url_empty(
-                    session, self.search_text, product.get("image_src", "")
-                )
-                await self.send(json.dumps(product))
-        except Exception:
-            logger.exception("Error occurred while scraping Flipkart")
-        
+            await browser.close()
 
         await database_sync_to_async(session.save)()
 

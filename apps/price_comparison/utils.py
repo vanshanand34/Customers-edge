@@ -1,6 +1,9 @@
+import logging
 from typing import TypedDict
 
 from django.contrib.sessions.backends.base import SessionBase
+
+logger = logging.getLogger(__name__)
 
 
 class SearchHistory(TypedDict):
@@ -41,9 +44,6 @@ class SearchHistoryHelper:
             if entry["text"] == search_text:
                 search_history[i]["url"] = url
                 break
-        print(
-            f"Updated search history for '{search_text}' with URL: {url}: {search_history}"
-        )
         session["search_history"] = search_history
 
     @staticmethod
@@ -63,5 +63,3 @@ class SearchHistoryHelper:
                 break
 
         session["search_history"] = search_history
-
-        print(f"Updated search history: {search_history}")
