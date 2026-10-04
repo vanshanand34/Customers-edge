@@ -40,21 +40,33 @@ async def create_browser_context(browser: Browser) -> BrowserContext:
 
 async def block_unnecessary_resources(route):
     """
-    Block unnecessary resources like images, fonts, and media to speed up scraping."""
+    Block resources that are not required for extracting
+    product information.
+
+    Product images from Flipkart are allowed because their
+    URLs are returned to the frontend.
+    """
+
     request = route.request
     resource_type = request.resource_type
-    url = request.url
+    url = request.url.lower()
 
-    # Allow Flipkart product images.
+    # We need Flipkart product images because we send their
+    # URLs back to the frontend.
     if resource_type == "image" and "rukmin" in url:
         await route.continue_()
         return
 
+    # We don't need any other images.
+    if resource_type == "image":
+        await route.abort()
+        return
+
     if resource_type in {
-        "image",
         "font",
         "media",
     }:
         await route.abort()
-    else:
-        await route.continue_()
+        return
+
+    await route.continue_()
