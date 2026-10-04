@@ -1,3 +1,4 @@
+import asyncio
 import logging
 import time
 from urllib.parse import quote_plus
@@ -149,6 +150,8 @@ async def scrape_flipkart(search_text: str, browser: Browser):
             "platform": "flipkart",
             "message": str(error),
         }
+    finally:
+        await context.close()   
 
     logger.debug(
         "Flipkart exception count: %d",
@@ -413,16 +416,23 @@ async def get_product_data(
     """
     Extract all supported fields from one product card.
     """
-
-    name = await get_product_name(card)
-    price = await get_product_price(card)
-    rating = await get_product_rating(card)
-    product_url = await get_product_url(
-        card,
-        base_url,
+    name, price, rating, product_url, image_src = await asyncio.gather(
+        get_product_name(card),
+        get_product_price(card),
+        get_product_rating(card),
+        get_product_url(card, base_url),
+        get_product_image(card)
     )
 
-    image_src = await get_product_image(card)
+    # name = await get_product_name(card)
+    # price = await get_product_price(card)
+    # rating = await get_product_rating(card)
+    # product_url = await get_product_url(
+    #     card,
+    #     base_url,
+    # )
+
+    # image_src = await get_product_image(card)
 
     return {
         "type": "product",

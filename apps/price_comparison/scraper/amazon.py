@@ -1,3 +1,4 @@
+import asyncio
 import logging
 import time
 from urllib.parse import quote_plus
@@ -38,6 +39,7 @@ async def scrape_amazon(search_text: str, browser: Browser):
     )
 
     page = await context.new_page()
+    tasks = []
 
     try:
         await page.route("**/*", block_unnecessary_resources)
@@ -46,7 +48,7 @@ async def scrape_amazon(search_text: str, browser: Browser):
         await page.goto(
             search_url,
             wait_until="domcontentloaded",
-            timeout=10000,
+            timeout=20000,
         )
 
         logger.debug(
@@ -65,27 +67,32 @@ async def scrape_amazon(search_text: str, browser: Browser):
         )
 
         for index in range(min(product_count, 10)):  # Limit to 10 products
+            product = products.nth(index)
+            tasks.append(extract_amazon_product(product, base_url))
+
+        for index, future in enumerate(asyncio.as_completed(tasks)):
             try:
-                product = products.nth(index)
+                # name = await get_product_name(product)
+                # price = await get_product_price(product)
+                # rating = await get_product_rating(product)
+                # product_url = await get_product_url(
+                #     product,
+                #     base_url,
+                # )
+                # image_src = await get_product_image(product)
 
-                name = await get_product_name(product)
-                price = await get_product_price(product)
-                rating = await get_product_rating(product)
-                product_url = await get_product_url(
-                    product,
-                    base_url,
-                )
-                image_src = await get_product_image(product)
+                curr_prod_data = await future
+                product_url = curr_prod_data.get("product_url")
 
-                curr_prod_data = {
-                    "type": "product",
-                    "name": (name.strip() if name else None),
-                    "price": price,
-                    "rating": rating,
-                    "product_url": product_url,
-                    "image_src": image_src,
-                    "platform": "amazon",
-                }
+                # curr_prod_data = {
+                #     "type": "product",
+                #     "name": (name.strip() if name else None),
+                #     "price": price,
+                #     "rating": rating,
+                #     "product_url": product_url,
+                #     "image_src": image_src,
+                #     "platform": "amazon",
+                # }
 
                 # logger.debug("Amazon product: %s", curr_prod_data)
 
@@ -119,6 +126,8 @@ async def scrape_amazon(search_text: str, browser: Browser):
             "platform": "amazon",
             "message": str(error),
         }
+    finally:
+        await context.close()
 
     logger.debug(
         "Amazon exception count: %d",
@@ -218,3 +227,83 @@ async def get_product_image(product: Locator):
     except Exception:
         logger.exception("Error occurred while fetching product image")
         return None
+
+
+async def extract_amazon_product(
+    product: Locator,
+    base_url: str,
+) -> dict:
+    """
+    Extract product information from an Amazon product locator.
+    Returns a dictionary containing product details.
+    """
+
+    data = await product.evaluate(
+        """
+        (el) => {
+            const title =
+                el.querySelector(
+                    "[data-cy='title-recipe'] h2 span, h2 span"
+                )?.textContent?.trim() || null;
+
+            const priceText =
+                el.querySelector(
+                    "span.a-price-whole"
+                )?.textContent?.trim() || null;
+
+            const ratingText =
+                el.querySelector(
+                    "[data-cy='reviews-block'] a"
+                )?.getAttribute("aria-label") || null;
+
+            const href =
+                el.querySelector(
+                    "[data-cy='title-recipe'] a[target='_blank']"
+                )?.getAttribute("href") || null;
+
+            const image =
+                el.querySelector(
+                    "img.s-image"
+                )?.getAttribute("src") || null;
+
+            return {
+                title,
+                priceText,
+                ratingText,
+                href,
+                image
+            };
+        }
+        """
+    )
+
+    price = None
+
+    if data["priceText"]:
+        try:
+            price = float(data["priceText"].replace(",", "").strip())
+        except ValueError:
+            pass
+
+    rating = None
+
+    if data["ratingText"]:
+        try:
+            rating = data["ratingText"].split()[0]
+        except (IndexError, AttributeError):
+            pass
+
+    product_url = data["href"]
+
+    if product_url and product_url.startswith("/"):
+        product_url = base_url + product_url
+
+    return {
+        "type": "product",
+        "name": data["title"],
+        "price": price,
+        "rating": rating,
+        "product_url": product_url,
+        "image_src": data["image"],
+        "platform": "amazon",
+    }

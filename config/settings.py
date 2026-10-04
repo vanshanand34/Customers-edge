@@ -105,7 +105,6 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = "config.urls"
-TEMPLATE_DEBUG = True
 
 TEMPLATES = [
     {

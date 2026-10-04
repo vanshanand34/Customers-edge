@@ -1,4 +1,6 @@
-@import url("https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=Winky+Sans:ital,wght@0,300..900;1,300..900&display=swap");
+:root {
+  --primary-font: "Geist", system-ui, sans-serif;
+}
 
 body {
   margin: 0;
@@ -9,7 +11,7 @@ body {
 }
 
 .navbar-container {
-  font-family: "system-ui", "Winky Sans", "Consolas", sans-serif;
+  font-family: var(--primary-font);
 }
 
 .navbar {
