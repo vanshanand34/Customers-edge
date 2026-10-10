@@ -59,22 +59,21 @@ async def scrape_amazon(search_text: str, browser: Browser):
 
         product_count = await products.evaluate_all("products => products.length")
 
-        html = await page.content()
+        # html = await page.content()
 
-        logger.info(
-            "platform=%s status=%s title=%r url=%s html_length=%d product_cards=%d",
-            "amazon",
-            response.status if response else None,
-            await page.title(),
-            page.url,
-            len(html),
-            await products.count(),
-        )
+        # logger.info(
+        #     "platform=%s status=%s title=%r url=%s html_length=%d product_cards=%d",
+        #     "amazon",
+        #     response.status if response else None,
+        #     await page.title(),
+        #     page.url,
+        #     len(html),
+        #     await products.count(),
+        # )
 
-
-        print(f"\n{'=' * 30} amazon BODY HTML {'=' * 30}")
-        print(await print_dom_structure(page, "amazon", max_nodes=450))
-        print(f"{'=' * 80}\n")
+        # print(f"\n{'=' * 30} amazon BODY HTML {'=' * 30}")
+        # print(await print_dom_structure(page, "amazon", max_nodes=450))
+        # print(f"{'=' * 80}\n")
 
         logger.debug("Amazon products found: %d", product_count)
 
@@ -324,7 +323,6 @@ async def extract_amazon_product(
         "image_src": data["image"],
         "platform": "amazon",
     }
-
 
 
 async def print_dom_structure(page, platform, max_nodes=250):

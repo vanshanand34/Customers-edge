@@ -51,16 +51,16 @@ async def scrape_flipkart(search_text: str, browser: Browser):
             timeout=10000,
         )
 
-        html = await page.content()
+        # html = await page.content()
 
-        logger.info(
-            "platform=%s status=%s title=%r url=%s html_length=%d ",
-            "flipkart",
-            response.status if response else None,
-            await page.title(),
-            page.url,
-            len(html),
-        )
+        # logger.info(
+        #     "platform=%s status=%s title=%r url=%s html_length=%d ",
+        #     "flipkart",
+        #     response.status if response else None,
+        #     await page.title(),
+        #     page.url,
+        #     len(html),
+        # )
 
 
         logger.debug(
@@ -99,9 +99,9 @@ async def scrape_flipkart(search_text: str, browser: Browser):
 
         # PROCESS PRODUCTS
 
-        print(f"\n{'=' * 30} flipkart BODY HTML {'=' * 30}")
-        print(await print_dom_structure(page, "flipkart", max_nodes=450))
-        print(f"{'=' * 80}\n")
+        # print(f"\n{'=' * 30} flipkart BODY HTML {'=' * 30}")
+        # print(await print_dom_structure(page, "flipkart", max_nodes=450))
+        # print(f"{'=' * 80}\n")
 
         logger.debug(
             "Processing Flipkart products at %.2f seconds",
