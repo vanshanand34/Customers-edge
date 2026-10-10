@@ -45,11 +45,23 @@ async def scrape_flipkart(search_text: str, browser: Browser):
     try:
         await page.route("**/*", block_unnecessary_resources)
 
-        await page.goto(
+        response = await page.goto(
             search_url,
-            wait_until="domcontentloaded",
+            wait_until="commit",
             timeout=10000,
         )
+
+        html = await page.content()
+
+        logger.info(
+            "platform=%s status=%s title=%r url=%s html_length=%d ",
+            "flipkart",
+            response.status if response else None,
+            await page.title(),
+            page.url,
+            len(html),
+        )
+
 
         logger.debug(
             "Flipkart page loaded at %.2f seconds", time.perf_counter() - start_time
@@ -86,6 +98,10 @@ async def scrape_flipkart(search_text: str, browser: Browser):
             logger.debug("Flipkart fallback products: %d", product_count)
 
         # PROCESS PRODUCTS
+
+        print(f"\n{'=' * 30} flipkart BODY HTML {'=' * 30}")
+        print(await print_dom_structure(page, "flipkart", max_nodes=450))
+        print(f"{'=' * 80}\n")
 
         logger.debug(
             "Processing Flipkart products at %.2f seconds",
@@ -151,7 +167,7 @@ async def scrape_flipkart(search_text: str, browser: Browser):
             "message": str(error),
         }
     finally:
-        await context.close()   
+        await context.close()
 
     logger.debug(
         "Flipkart exception count: %d",
@@ -421,7 +437,7 @@ async def get_product_data(
         get_product_price(card),
         get_product_rating(card),
         get_product_url(card, base_url),
-        get_product_image(card)
+        get_product_image(card),
     )
 
     # name = await get_product_name(card)
@@ -443,3 +459,78 @@ async def get_product_data(
         "image_src": image_src,
         "platform": "flipkart",
     }
+
+
+
+
+async def print_dom_structure(page, platform, max_nodes=250):
+    print(f"\n========== {platform}: DOM STRUCTURE ==========")
+
+    result = await page.locator("body").evaluate(
+        """(body, maxNodes) => {
+            const ignored = new Set([
+                "SCRIPT", "STYLE", "SVG", "PATH",
+                "NOSCRIPT", "TEMPLATE"
+            ]);
+
+            const lines = [];
+            let visited = 0;
+
+            function walk(el, depth) {
+                if (!el || visited >= maxNodes) return;
+                if (ignored.has(el.tagName)) return;
+
+                visited++;
+
+                const indent = "  ".repeat(Math.min(depth, 12));
+                const tag = el.tagName.toLowerCase();
+
+                const attrs = ["id", "class", "role", "data-testid",
+                               "data-component-type", "aria-label"];
+
+                const details = attrs
+                    .map(name => {
+                        const value = el.getAttribute(name);
+                        return value
+                            ? `${name}="${value.slice(0, 160)}"`
+                            : null;
+                    })
+                    .filter(Boolean);
+
+                const directText = Array.from(el.childNodes)
+                    .filter(n => n.nodeType === Node.TEXT_NODE)
+                    .map(n => n.textContent.trim())
+                    .filter(Boolean)
+                    .join(" ")
+                    .replace(/\\s+/g, " ")
+                    .slice(0, 120);
+
+                const suffix = directText
+                    ? ` text="${directText}"`
+                    : "";
+
+                lines.push(
+                    `${indent}<${tag} ${details.join(" ")}>${suffix}`
+                );
+
+                for (const child of el.children) {
+                    if (visited >= maxNodes) break;
+                    walk(child, depth + 1);
+                }
+            }
+
+            walk(body, 0);
+
+            return {
+                nodesVisited: visited,
+                truncated: visited >= maxNodes,
+                structure: lines.join("\\n")
+            };
+        }""",
+        max_nodes,
+    )
+
+    print(f"Nodes visited: {result['nodesVisited']}")
+    print(f"Truncated: {result['truncated']}")
+    print(result["structure"])
+    print("========== END DOM STRUCTURE ==========\n")
