@@ -143,15 +143,20 @@ class SearchResultsConsumer(AsyncWebsocketConsumer):
 
         browser = await browser_manager.get_browser()
 
-        await asyncio.gather(
-            self.send_flipkart_results(
-                browser,
-                session,
-            ),
-            self.send_amazon_results(
-                browser,
-                session,
-            ),
+        # await asyncio.gather(
+        #     self.send_flipkart_results(
+        #         browser,
+        #         session,
+        #     ),
+        #     self.send_amazon_results(
+        #         browser,
+        #         session,
+        #     ),
+        # )
+
+        await self.send_amazon_results(
+            browser,
+            session
         )
 
         logger.info("All scraping completed")
