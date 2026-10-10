@@ -45,7 +45,7 @@ async def scrape_amazon(search_text: str, browser: Browser):
         await page.route("**/*", block_unnecessary_resources)
         link_to_product_data_map = {}
 
-        await page.goto(
+        response = await page.goto(
             search_url,
             wait_until="domcontentloaded",
             timeout=20000,
@@ -58,6 +58,20 @@ async def scrape_amazon(search_text: str, browser: Browser):
         products = page.locator("div[data-component-type='s-search-result']")
 
         product_count = await products.evaluate_all("products => products.length")
+
+        html = await page.content()
+
+        logger.info(
+            "platform=%s status=%s title=%r url=%s html_length=%d product_cards=%d",
+            "amazon",
+            response.status if response else None,
+            await page.title(),
+            page.url,
+            len(html),
+            await products.count(),
+        )
+
+        logger.info("HTML content:\n%s", html)
 
         logger.debug("Amazon products found: %d", product_count)
 

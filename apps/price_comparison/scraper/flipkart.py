@@ -45,11 +45,24 @@ async def scrape_flipkart(search_text: str, browser: Browser):
     try:
         await page.route("**/*", block_unnecessary_resources)
 
-        await page.goto(
+        response = await page.goto(
             search_url,
-            wait_until="domcontentloaded",
+            wait_until="commit",
             timeout=10000,
         )
+
+        html = await page.content()
+
+        logger.info(
+            "platform=%s status=%s title=%r url=%s html_length=%d ",
+            "flipkart",
+            response.status if response else None,
+            await page.title(),
+            page.url,
+            len(html),
+        )
+
+        logger.info("HTML content:\n%s", html)
 
         logger.debug(
             "Flipkart page loaded at %.2f seconds", time.perf_counter() - start_time
@@ -151,7 +164,7 @@ async def scrape_flipkart(search_text: str, browser: Browser):
             "message": str(error),
         }
     finally:
-        await context.close()   
+        await context.close()
 
     logger.debug(
         "Flipkart exception count: %d",
@@ -421,7 +434,7 @@ async def get_product_data(
         get_product_price(card),
         get_product_rating(card),
         get_product_url(card, base_url),
-        get_product_image(card)
+        get_product_image(card),
     )
 
     # name = await get_product_name(card)
