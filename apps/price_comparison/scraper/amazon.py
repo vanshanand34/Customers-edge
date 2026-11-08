@@ -47,12 +47,21 @@ async def scrape_amazon(search_text: str, browser: Browser):
 
         response = await page.goto(
             search_url,
-            wait_until="domcontentloaded",
+            wait_until="commit",
             timeout=20000,
         )
 
         logger.debug(
             "Amazon page loaded at %.2f seconds", time.perf_counter() - start_time
+        )
+
+        await page.wait_for_selector(
+            "div[data-component-type='s-search-result']",
+            timeout=10000,
+        )
+
+        logger.debug(
+            "Amazon selectors loaded at %.2f seconds", time.perf_counter() - start_time
         )
 
         products = page.locator("div[data-component-type='s-search-result']")

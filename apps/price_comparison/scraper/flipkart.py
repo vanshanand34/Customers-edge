@@ -62,7 +62,6 @@ async def scrape_flipkart(search_text: str, browser: Browser):
         #     len(html),
         # )
 
-
         logger.debug(
             "Flipkart page loaded at %.2f seconds", time.perf_counter() - start_time
         )
@@ -74,6 +73,11 @@ async def scrape_flipkart(search_text: str, browser: Browser):
 
         except Exception:
             logger.debug("Flipkart login popup not found")
+
+        logger.info(
+            "Flipkart popup check: %.2fs",
+            time.perf_counter() - start_time,
+        )
 
         # Allow products to render.
 
@@ -118,10 +122,11 @@ async def scrape_flipkart(search_text: str, browser: Browser):
                 # EXTRACT DATA
                 # ----------------------------------------
 
-                curr_prod_data = await get_product_data(
-                    card,
-                    base_url,
-                )
+                curr_prod_data = await extract_flipkart_product(card)
+                # curr_prod_data = await get_product_data(
+                #     card,
+                #     base_url,
+                # )
 
                 product_url = curr_prod_data.get("product_url")
 
@@ -461,6 +466,59 @@ async def get_product_data(
     }
 
 
+async def extract_flipkart_product(card) -> dict:
+    data = await card.evaluate(
+        """(el) => {
+            const name =
+                el.querySelector("a[title]")?.getAttribute("title")
+                || el.querySelector("img[alt]")?.getAttribute("alt");
+
+            const image =
+                el.querySelector("img")?.getAttribute("src");
+
+            const link =
+                el.querySelector("a[href*='/p/']")?.getAttribute("href");
+            
+            let price = 
+                el.querySelector("div.hZ3P6w")?.textContent;
+            price = price ? price.replace("₹", "").replace(",", "").trim() : null;
+
+            const rating = 
+                el.querySelector("div.MKiFS6")?.textContent
+                ? parseFloat(el.querySelector("div.MKiFS6").textContent.replace("★", "").trim())
+                : null;
+
+            return {
+                name,
+                price,
+                rating,
+                link,
+                image
+            };
+        }"""
+    )
+
+    price = None
+
+    if data["price"]:
+        try:
+            price = float(data["price"].replace(",", "").strip())
+        except ValueError:
+            pass
+
+    link = data.get("link")
+    if link and link.startswith("/"):
+        link = "https://www.flipkart.com" + link
+
+    return {
+        "type": "product",
+        "name": data.get("name"),
+        "price": price,
+        "rating": data.get("rating"),
+        "product_url": link,
+        "image_src": data.get("image"),
+        "platform": "flipkart",
+    }
 
 
 async def print_dom_structure(page, platform, max_nodes=250):
